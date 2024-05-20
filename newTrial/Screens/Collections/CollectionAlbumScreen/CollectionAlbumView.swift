@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct CollectionAlbumView: View {
-    let collection: MediaCollection
-    var viewModel = CollectionsViewModel()
+    
+    @Environment(\.presentationMode) var presentationMode
+    var collection: MediaCollection
+    @ObservedObject var viewModel : CollectionsViewModel
     @State var openCollectionFile = false
+    @State var isShowingShareSheet: Bool = false
+    @State var isShowingCollections: Bool = false
+    var optionalViewModel = VideoPlayerViewModel()
     
     var body: some View {
         NavigationView{
@@ -26,6 +31,8 @@ struct CollectionAlbumView: View {
                                 Button(action: {
                                     viewModel.selectedMediaItem = viewModel.getMediaItems(id: mediaItem)
                                     viewModel.cId = collection.id
+                                    openCollectionFile.toggle()
+                                    
                                     
                                 })
                                 {  let newmediaItem = viewModel.getMediaItems(id: mediaItem)
@@ -44,12 +51,56 @@ struct CollectionAlbumView: View {
                                             .padding(5)
                                     }
                                     
-                                }.fullScreenCover(isPresented: $openCollectionFile) {
-                                    if let selectedMediaItem = viewModel.selectedMediaItem {
-                                        VideoPlayerView(mediaItem: selectedMediaItem, inCollection: true, collectionId: viewModel.cId)
-                                    } else {
-                                        EmptyView()
+                                }.contextMenu{
+                                    
+                                    Button(action: {
+                                        isShowingShareSheet.toggle()
+                                    }) {
+                                        Label("Share via", systemImage: "square.and.arrow.up")
                                     }
+                                    
+                                    
+                                    Button(action: {
+                                        let customMediaItem = viewModel.getMediaItems(id: mediaItem)
+                                        optionalViewModel.saveToPhotos(mediaItem: customMediaItem)
+                                    }) {
+                                        Label("Save to Photos", systemImage: "square.and.arrow.down")
+                                        
+                                    }
+                                    
+                                    Button(action: {
+                                        
+                                    isShowingCollections = true
+                                        
+                                    }, label: {Text("Move to Collection")
+                                    })
+                                   
+                                    
+                                    Button(action: {
+                                        
+                                        let customMediaItem = viewModel.getMediaItems(id: mediaItem)
+                                        optionalViewModel.fileRemove(mediaItem: customMediaItem, collectionId: collection.id)
+                                        
+                                        
+                                    }) {
+                                        
+                                            Label("Remove", systemImage: "trash")
+                                        
+                                    }.foregroundStyle(Color.red)
+                                    
+                                    
+                                    
+                                    
+                                    
+                               
+                                }.sheet(isPresented: $isShowingShareSheet) {
+                                    let customMediaItem = viewModel.getMediaItems(id: mediaItem)
+                                    if let url = URL(string: customMediaItem.sourceFile ) {
+                                        ShareSheet(items: [url])
+                                    }
+                                }
+                                .sheet(isPresented: $isShowingCollections) {
+                                    ChooseCollectionView(viewModel: ChooseCollectionViewModel(), mediaItemId: mediaItem)
                                 }
                             }
                             
@@ -59,13 +110,30 @@ struct CollectionAlbumView: View {
                     }
                 }
             }.navigationTitle("\(collection.name)")
-
+                .navigationBarItems(
+                    leading: Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .resizable()
+                            .foregroundColor(.blue)
+                            .frame(width:17.5,height: 25)
+                            .padding(5)
+                    })
+                .fullScreenCover(isPresented: $openCollectionFile) {
+                    if let selectedMediaItem = viewModel.selectedMediaItem {
+                        VideoPlayerView(mediaItem: selectedMediaItem, inCollection: true, collectionId: viewModel.cId, viewModel: VideoPlayerViewModel())
+                    } else {
+                        EmptyView()
+                    }
+                }
+                
         }
         
     }
 }
     #Preview {
-        CollectionAlbumView(collection: MediaCollection())
+        CollectionAlbumView(collection: MediaCollection(), viewModel: CollectionsViewModel())
     }
     
     

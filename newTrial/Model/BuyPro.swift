@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct ProPackage {
+    let name: String
+    let pricePerWeek: String
+    let totalPrice: String
+}

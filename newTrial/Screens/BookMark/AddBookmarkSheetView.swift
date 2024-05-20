@@ -8,11 +8,43 @@
 import SwiftUI
 
 struct AddBookmarkSheetView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel: BookmarkViewModel
+    @State private var name: String = ""
+    @State private var link: String = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            Form {
+                Section(header: Text("Bookmark Details")) {
+                    TextField("Name", text: $name)
+                    TextField("Link", text: $link)
+                        .keyboardType(.URL)
+                        .autocapitalization(.none)
+                }
+            }
+            .navigationTitle("Add Bookmark")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        if !name.isEmpty && !link.isEmpty {
+                            viewModel.addBookmark(name: name, link: link)
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
-#Preview {
-    AddBookmarkSheetView()
+struct AddBookmarkSheet_Previews: PreviewProvider {
+    static var previews: some View {
+        AddBookmarkSheetView(viewModel: BookmarkViewModel())
+    }
 }

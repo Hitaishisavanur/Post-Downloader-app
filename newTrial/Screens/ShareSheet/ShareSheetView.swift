@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import UIKit
 
-struct ShareSheetView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    var activities: [UIActivity]? = nil
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: activities)
+        return controller
     }
-}
 
-#Preview {
-    ShareSheetView()
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

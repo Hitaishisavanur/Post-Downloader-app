@@ -8,97 +8,70 @@
 import SwiftUI
 
 
-struct SettingsView: View {
-    @State var saveToPhotos = false
-    
-    var version = "1.01"
+struct SettingsView: View{
+    @EnvironmentObject var viewModel: SettingsViewModel
     
     var body: some View {
-        
-        
-        NavigationView{
-            Form{
-                Section{
+        NavigationView {
+            Form {
+                Section {
                     Text("Try Ad-free Subscription")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.tryAdFreeSubscription)
                     
                     Text("Restore Purchase")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.restorePurchase)
                     
                     Text("About Subscription")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.aboutSubscription)
                     
                     Text("Manage Subscription")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.manageSubscription)
                     
-                    Toggle("Save to Camera Roll", isOn: self.$saveToPhotos)
-                    
+                    Toggle("Save to Camera Roll", isOn: $viewModel.settings.saveToPhotos) .onChange(of: viewModel.settings.saveToPhotos) { newValue in
+                        UserDefaults.standard.set(newValue, forKey: "saveToPhotos")
+                    }
                 }
                 
-                Section{
+                Section {
                     Text("Share App")
-                        .onTapGesture(perform: {
-                        print("hello")
-                    })
+                        .onTapGesture(perform: viewModel.shareApp)
                     
                     Text("Rate on the App Store")
-                        .onTapGesture(perform: {
-                        print("hello")
-                    })
+                        .onTapGesture(perform: viewModel.rateApp)
                 }
                 
-                Section{
+                Section {
                     Text("FAQ")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.showFAQ)
                     
                     Text("Contact Us")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.contactUs)
                     
                     Text("Send Feedback")
-                        .onTapGesture(perform: {
-                        print("hello")
-                    })
+                        .onTapGesture(perform: viewModel.sendFeedback)
                 }
                 
-                Section{
+                Section {
                     Text("Privacy Policy")
-                        .onTapGesture(perform: {
-                        print("hello")
-                    })
+                        .onTapGesture(perform: viewModel.showPrivacyPolicy)
                     
                     Text("Terms of Use")
-                        .onTapGesture(perform: {
-                        print("hello")
-                    })
+                        .onTapGesture(perform: viewModel.showTermsOfUse)
                 }
                 
-                Section{
+                Section {
                     Text("About")
-                        .onTapGesture(perform: {
-                            print("hello")
-                        })
+                        .onTapGesture(perform: viewModel.showAbout)
                 }
-                
             }
-            
-            .navigationTitle(Text("Settings"))
+            .navigationTitle("Settings")
         }
-        
     }
 }
 
-#Preview {
-    SettingsView()
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsView()
+    }
 }
+

@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+struct MediaItem: Identifiable{
+    var id: UUID
+    var displayImg:String
+    var sourceFile:String
+    var date: Date
+    var link: String
+    
+   
+}

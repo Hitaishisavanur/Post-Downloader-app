@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct newTrialApp: App {
+    let dataController = DataController.shared
+    @StateObject var viewModel = SettingsViewModel()
+    
     var body: some Scene {
         WindowGroup {
             BottomTabView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
+                .environmentObject(viewModel)
         }
     }
 }

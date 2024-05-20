@@ -9,32 +9,29 @@ import SwiftUI
 
 struct BottomTabView: View {
     var body: some View {
+        ZStack {
+        
+            TabView{
                 
-        TabView{
-            
-            HomeScreenView()
-                .tabItem { Label("Home", systemImage: "house")
+                
+                HomeScreenView(viewModel: HomeScreenViewModel())
+                    .tabItem { Label("Home", systemImage: "house")
+                    }
+                
+                
+                CollectionsView(viewModel: CollectionsViewModel())
+                    .tabItem { Label("Collections", systemImage: "rectangle.stack")
+                    }
+                
+                BookmarkView()
+                    .tabItem { Label("Bookmarks", systemImage: "bookmark")
+                    }
+                
+                SettingsView()
+                    .tabItem { Label("Settings", systemImage: "gearshape")
+                    }
                 }
-            
-            SavedFilesView()
-                .tabItem { Label("Saved Files", systemImage: "rectangle.stack")
-                }
-            
-            BookmarkView()
-                .tabItem { Label("Bookmarks", systemImage: "bookmark")
-                }
-            
-            SettingsView()
-                .tabItem { Label("Settings", systemImage: "gearshape")
-                }
-            
-               
-        }
-        
-        
-        
-        
-        
+        }.background(.ultraThinMaterial)
             
     }
 }
@@ -42,3 +39,4 @@ struct BottomTabView: View {
 #Preview {
     BottomTabView()
 }
+

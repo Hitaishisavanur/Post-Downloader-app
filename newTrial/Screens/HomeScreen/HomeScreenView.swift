@@ -6,108 +6,164 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct HomeScreenView: View {
-    @State var text = ""
-    @State var saveToPhotos = false
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \DBmain.date, ascending: false)],
+        animation: .default)
+    private var dataModels: FetchedResults<DBmain>
+    @ObservedObject var viewModel: HomeScreenViewModel
+    @State var isShowingShareSheet: Bool = false
+    @State var isShowingCollections: Bool = false
+    
+    var optionalViewModel = VideoPlayerViewModel()
+    
+    
     var body: some View {
-        
-            NavigationView{
-                
-                Form{
-                    VStack{
-                        Text("Paste Test Link")
-                            .font(.headline)
-                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                        .padding(20) 
-                        .padding(.top, 30)
-                    }.listRowSeparator(.hidden)
-                    HStack{
-                        
-                        VStack{
-                            Section{
-                                TextField( "test link...", text: $text )
-                                    .padding(8)
-                            }
+        NavigationView {
+            ZStack {
+                VStack {
+                    VStack {
+                        Button(action: {
+                            viewModel.toggleCardView()
+                        }) {
+                            Text("Save New Post")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                                .padding(7)
                         }
-                        
-                        VStack{
-                            Section{
-                                
-                                Button{ print("pasted")}
-                            label: {
-                                Text("Paste")
-                                
-                            }.buttonStyle(.borderedProminent)
-                                
-                                
-                            }
-                            
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                        .sheet(isPresented: $viewModel.isShowingCardView) {
+                            DownloadCardView(viewModel: DownloadViewModel())
                         }
-                    }.padding(7)
-                    
-                        .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.secondary, lineWidth: 1)
-                    )
-                    VStack{
-                        
-                        
-                        Button{print("downloading")}
-                    label: {
-                        
-                        
-                        Text("Download")
-                            .font(.title2)
-                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    }.buttonStyle(.borderedProminent)
-                        
-                        Spacer()
-                        VStack{
-                            Toggle(isOn: $saveToPhotos, label: {
-                                Text("Save a Copy to Photos")
-                            }).padding(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.secondary, lineWidth: 1)
-                            )
-                        }.padding(.top, 40)
                     }
+                    .padding(.top, 10)
+                    .padding(.bottom, 20)
                     
+                    Spacer()
                     
-                }.padding(.top,30)
-                    
-                    
-                
-                    .navigationTitle(Text("Downloader"))
-                
-                    .toolbar{
-                        
-                        NavigationLink(destination: BuyProView()) {
+                    if dataModels.isEmpty {
+                        Text("Your Saved Posts Appear here.\nNo Posts Saved yet.")
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.secondary)
+                    } else {
+                        ScrollView {
+                            LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
+                                ForEach(dataModels) { dataModel in
+                                    Button(action: {
+                                        viewModel.selectedMediaItem = MediaItem(id:dataModel.id ?? UUID(),displayImg: dataModel.displayImg ?? "", sourceFile: dataModel.sourceFile ?? "", date: dataModel.date ?? Date(), link: dataModel.link ?? "")
+                                        viewModel.openMedia = true
+                                    })
+                                    {
+                                        if let displayImg = viewModel.loadImage(from: dataModel.displayImg) {
+                                            Image(uiImage: displayImg)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                            //.frame(width: 100, height: 100)
+                                                .cornerRadius(10)
+                                                .padding(5)
+                                        } else {
+                                            Rectangle()
+                                                .fill(Color.gray)
+                                            //.frame(width: 100, height: 100)
+                                                .cornerRadius(10)
+                                                .padding(5)
+                                        }
+                                        
+                                    }.contextMenu{
+                                        
+                                        Button(action: {
+                                            let mediaItem = MediaItem(id:dataModel.id ?? UUID(),displayImg: dataModel.displayImg ?? "", sourceFile: dataModel.sourceFile ?? "", date: dataModel.date ?? Date(), link: dataModel.link ?? "")
+                                            optionalViewModel.saveToPhotos(mediaItem: mediaItem)
+                                        }) {
+                                            Label("Save to Photos", systemImage: "square.and.arrow.down")
+                                            
+                                        }
+                                        
+                                        Button(action: {
+                                            isShowingShareSheet.toggle()
+                                        }) {
+                                            Label("Share via", systemImage: "square.and.arrow.up")
+                                        }
+                                        
+                                        Button(action: {
+                                            
+                                        isShowingCollections = true
+                                            
+                                        }, label: {Text("Move to Collection")
+                                        })
+                                        
+                                        Button(action: {
+                                            
+                                            let mediaItem = MediaItem(id:dataModel.id ?? UUID(),displayImg: dataModel.displayImg ?? "", sourceFile: dataModel.sourceFile ?? "", date: dataModel.date ?? Date(), link: dataModel.link ?? "")
+                                            optionalViewModel.fileDelete(mediaItem: mediaItem)
+                                            
+                                            
+                                        }) {
+                                            
+                                                Label("Delete", systemImage: "trash")
+                                            
+                                        }.foregroundStyle(Color.red)
+                                        
+                                        
+                                        
+                                   
+                                    }.sheet(isPresented: $isShowingShareSheet) {
+                                        if let url = URL(string: dataModel.sourceFile ?? "") {
+                                            ShareSheet(items: [url])
+                                        }
+                                    }
+                                    .sheet(isPresented: $isShowingCollections) {
+                                        ChooseCollectionView(viewModel: ChooseCollectionViewModel(), mediaItemId: dataModel.id!)
+                                    }
+                                }
+                                
+                            }
                             
+                            Spacer()
+                        }
+                    }
+                }
+                .navigationTitle("Downloader")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            viewModel.buyPremiumAction()
+                        }) {
                             Text("Ads-Free")
                                 .font(.headline)
-                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                                .padding()
-                                .foregroundColor(.primary)
-                                
-                            
-                            
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                                .padding(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                        .padding(.trailing, 2)
+                                )
                         }
-                        .frame(width: 100, height: 40)
-                        .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.primary, lineWidth: 2)
-                            
-                    ).padding(.trailing, 2)
-                        
+                        .fullScreenCover(isPresented: $viewModel.buyPremium, content:{BuyProView(buyPremium: $viewModel.buyPremium,viewModel: BuyProViewModel())})
                     }
-                
+                }
             }
+        }.fullScreenCover(isPresented: $viewModel.openMedia) {
+            if let selectedMediaItem = viewModel.selectedMediaItem {
+                VideoPlayerView(mediaItem: selectedMediaItem, inCollection: false, viewModel: VideoPlayerViewModel())
+            } else {
+                EmptyView()
+            }
+        }
         
     }
 }
 
-#Preview {
-    HomeScreenView()
+struct HomeScreenView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeScreenView( viewModel: HomeScreenViewModel())
+    }
 }
+
+
