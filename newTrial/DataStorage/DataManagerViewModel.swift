@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DataManager: ObservableObject{
+class DataManagerViewModel: ObservableObject{
     
     func getDownloadsDirectory()-> URL{
         let fileManager = FileManager.default
