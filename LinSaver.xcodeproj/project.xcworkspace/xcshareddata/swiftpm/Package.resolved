@@ -1,0 +1,42 @@
+{
+  "originHash" : "307910e1292c69462e93f8879ac14a348ee5532c3aae992b764d4a9fc950b9d7",
+  "pins" : [
+    {
+      "identity" : "purchases-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
+      "state" : {
+        "revision" : "7ec1091a6f929c40be2a1c695a63471f5d0c330d",
+        "version" : "4.43.0"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-google-mobile-ads",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
+      "state" : {
+        "revision" : "746253bf8803826e4de14c9e619739733ea8fb3b",
+        "version" : "11.5.0"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-google-user-messaging-platform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
+      "state" : {
+        "revision" : "9b68aa69fb508f0274853e226c734151a973c7b7",
+        "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "028487d4a8a291b2fe1b4392b5425b6172056148",
+        "version" : "2.7.2"
+      }
+    }
+  ],
+  "version" : 3
+}
