@@ -4,15 +4,13 @@ import SwiftUI
 import RevenueCat
 
 struct BottomTabView: View {
-    @State private var showPremiumAd: Bool = true
+    @State private var showPremiumAd: Bool = false
     @EnvironmentObject var interstetialAdsManager: InterstitialAdsManager
     private let userViewModel = UserViewModel.shared
     @State var isPresentedAd: Bool = false
    // @State var customerInfo: CustomerInfo?
     
-    init(){
-      
-        }
+   
     
     var body: some View {
         ZStack {
@@ -27,10 +25,16 @@ struct BottomTabView: View {
                             
                         }
                 }else{
+              
                     HomeScreenView(viewModel: HomeScreenViewModel())
                         .tabItem { Label("Home", systemImage: "house")
                             
-                        }.sheet(isPresented: $showPremiumAd){
+                        }
+                        
+                        .onFirstAppear {
+                            checkSubscriptionStatus()
+                        }
+                        .sheet(isPresented: $showPremiumAd){
                             PremiumAdPopup()
                                 
                                 
@@ -56,6 +60,17 @@ struct BottomTabView: View {
         
             
     }
+    
+    
+    private func checkSubscriptionStatus() {
+            // Fetch the customer info to update the subscription status
+            userViewModel.refreshCustomerInfo()
+            
+            // Set the showPremiumAd state based on the subscription status
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                showPremiumAd = !userViewModel.subscriptionActive
+            }
+        }
 }
 
 #Preview {

@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct SettingsModel{
+struct SettingsModel: Equatable{
     var saveToPhotos: Bool
 }

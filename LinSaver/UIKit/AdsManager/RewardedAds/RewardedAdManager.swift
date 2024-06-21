@@ -53,6 +53,7 @@ class RewardedAdManager: NSObject, GADFullScreenContentDelegate, ObservableObjec
 
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("Ad dismissed full screen content")
+        
         loadAd()
     }
 }

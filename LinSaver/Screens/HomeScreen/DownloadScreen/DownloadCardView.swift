@@ -5,13 +5,15 @@ import GoogleMobileAds
 struct DownloadCardView: View {
     
     @ObservedObject var viewModel: DownloadViewModel
-    @EnvironmentObject var saveViewModel: SettingsViewModel
+    @Environment(\.presentationMode) var presentationMode
+    var userDefaults = UserDefaults(suiteName: "group.com.LinSaver.group")!
+    @State var subscriptionActive: Bool = false
+   
     
-
     
     @State var url: String?
     
-
+    
     var body: some View {
         NavigationView{
             Form {
@@ -52,86 +54,255 @@ struct DownloadCardView: View {
                 )
                 
                 VStack {
-                    Button(action: {
-                        if viewModel.text != "" && viewModel.text.contains(".linkedin."){
-                            viewModel.downloadButtonTapped(saveToPhotos: saveViewModel.settings.saveToPhotos)
-                            if url != nil{
-                                
-                                url = nil
-                                
-                            }
+                    if !subscriptionActive{
+                        if(viewModel.downloadCount < 15 && viewModel.downloadCount >= 0) {
                             
-                        }else{
-                            viewModel.showError("Invalid Url")
-                        }
-                    }) {
-                        Text("Download")
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    
-                    VStack {
-                        
-                        Toggle("Save to Camera Roll", isOn: $saveViewModel.settings.saveToPhotos)
-                            .onChange(of: saveViewModel.settings.saveToPhotos) { newValue in
-                                if !newValue {
-                                    // Don't show alert when turning off
-                                    return
-                                }
-                                saveViewModel.checkPhotoLibraryAuthorization { authorized in
-                                    if authorized {
-                                        // If permission is granted, save to photos
-                                        saveViewModel.saveToPhotosChanged(true)
-                                    } else {
-                                        // If permission is denied, show alert and set toggle to false
-                                        saveViewModel.saveToPhotosChanged(false)
-                                        viewModel.showError("Permission denied to access photo library. Please enable it in Settings.")
+                            
+                            Button(action:{
+                                
+                                
+                                if viewModel.text != "" && viewModel.text.contains(".linkedin."){
+                                    viewModel.downloadButtonTapped(saveToPhotos: false)
+                                    if url != nil{
+                                        
+                                        url = nil
+                                        
                                     }
+                                    
+                                }else{
+                                    viewModel.showError("Invalid Url")
                                 }
+                                
+                            }) {
+                                Text("Download (\(15 - viewModel.downloadCount) left)")
+                                    .font(.title2)
+                                    .frame(maxWidth: .infinity)
                             }
-                            .padding(8)
+                            .buttonStyle(.borderedProminent)
+                            .padding(.bottom,20)
+                            
+                            
+                            
+                            Button(action:{
+                                
+                                
+                                if viewModel.text != "" && viewModel.text.contains(".linkedin."){
+                                    viewModel.showError("This is Pro-Only Feature. Please Purchase premium version to enjoy this feature")
+                                    if url != nil{
+                                        
+                                        url = nil
+                                        
+                                    }
+                                    
+                                }else{
+                                    viewModel.showError("Invalid Url")
+                                }
+                                
+                            }) {
+                                Text("Download & Save to Photos")
+                                    .font(.title2)
+                                    .frame(maxWidth: .infinity)
+                                   // .background(.green)
+                            }
+                            .tint(.green)
+                            .buttonStyle(.borderedProminent)
+                            
+                           
+
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.secondary, lineWidth: 1)
-                                    .overlay(
-                                                    ZStack {
-                                                        Circle()
-                                                            .fill(Color.red)
-                                                            .frame(width: 24, height: 24)
-                                                        Image(systemName: "crown.fill")
-                                                            .resizable()
-                                                            .frame(width: 16, height: 16)
-                                                            .foregroundColor(.white)
-                                                    }
-                                                    .offset(x: -5, y: -20),
-                                                    alignment: .topTrailing
-                                                )
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 24, height: 24)
+                                    Image(systemName: "crown.fill")
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
+                                        .foregroundColor(.white)
+                                }
+                                    .offset(x: -5, y: -20),
+                                alignment: .topTrailing
                             )
                             
+                          
+                            
+                        }else{
+                            
+                            // exceeded 2 buttons
+                            
+                            
+                            
+                            
+                            Button(action:{
+                                print("exceeeded")
+                                
+                                
+                                if url != nil{
+                                    
+                                    url = nil
+                                    
+                                }
+                                
+                                
+                                
+                            }) {
+                                Text("Download (0 left)")
+                                    .font(.title2)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .padding(.bottom, 20)
+                            
+                            
+                            
+                            Button(action:{
+                                
+                                
+                                if viewModel.text != "" && viewModel.text.contains(".linkedin."){
+                                    viewModel.showError("This is Pro-Only Feature. Please Purchase premium version to enjoy this feature")
+                                    if url != nil{
+                                        
+                                        url = nil
+                                        
+                                    }
+                                    
+                                }else{
+                                    viewModel.showError("Invalid Url")
+                                }
+                                
+                            }) {
+                                Text("Download & Save to Photos")
+                                    .font(.title2)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .tint(.green)
+                            .buttonStyle(.borderedProminent)
+                            
+                            .overlay(
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 24, height: 24)
+                                    Image(systemName: "crown.fill")
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
+                                        .foregroundColor(.white)
+                                }
+                                    .offset(x: -5, y: -20),
+                                alignment: .topTrailing
+                            )
+                            
+                        
+                            
+                        }
+                        
+                    }else{
+                        
+                        //subscribed 2 buttons
+                        
+                        
+                        Button(action:{
+                            
+                            
+                            if viewModel.text != "" && viewModel.text.contains(".linkedin."){
+                                viewModel.downloadButtonTapped(saveToPhotos: false)
+                                if url != nil{
+                                    
+                                    url = nil
+                                    
+                                }
+                                
+                            }else{
+                                viewModel.showError("Invalid Url")
+                            }
+                            
+                        }) {
+                            Text("Download")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding(.bottom, 20)
+                        Button(action:{
+                            
+                            
+                            if viewModel.text != "" && viewModel.text.contains(".linkedin."){
+                               viewModel.checkPhotoLibraryAuthorization { authorized in
+                                    if authorized {
+                                        // If permission is granted, save to photos
+                                        viewModel.downloadButtonTapped(saveToPhotos: true)
+                                    } else {
+                                        // If permission is denied, show alert and set toggle to false
+                                        
+                                        viewModel.showError("Permission denied to access photo library. Please enable it in device settings.\n Go to Settings > LinSaver > Photos > select \"Add Photos Only\"")
+                                    }
+                                }
+                               
+                                if url != nil{
+                                    
+                                    url = nil
+                                    
+                                }
+                                
+                            }else{
+                                viewModel.showError("Invalid Url")
+                            }
+                            
+                        }) {
+                            Text("Download & Save to Photos")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .tint(.green)
+                        .buttonStyle(.borderedProminent)
                     }
-                    .padding(.top, 30)
+                    
+                    
+                    
+     
+                    
+                    if(viewModel.errorMessageExt != ""){
+                        VStack{
+                            Text(viewModel.errorMessageExt)
+                                .foregroundStyle(.red)
+                        }
+                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .padding(.top, 0)
+            .toolbar{
+                ToolbarItemGroup(placement: .topBarTrailing){
+                    if(url == nil){
+                        Button("Cancel"){
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                }
+            }
             
             .onAppear(){
+               subscriptionActive = userDefaults.bool(forKey: "subscriptionActive")
                 if url != nil{
                     viewModel.text = url ?? ""
+                    viewModel.urls = url
                 }
                 
             }
             .alert(isPresented: $viewModel.showErrorAlert) {
-                Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? "An unknown error occurred."), dismissButton: .default(Text("OK")))
-            }
+                Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? "An unknown error occurred." ), dismissButton: .default(Text("OK")))
+                        }
+            
         }
+        
+        .loadingOverlay(isPresented: $viewModel.isDownloading, loadingText: "Downloading, please wait...")
+        .loadingOverlay(isPresented: $viewModel.isDownloadingAndSaving, loadingText: "Downloading and Saving to Photos, please wait...")
+        
     }
     
 }
 
 struct DownloadCardView_Previews: PreviewProvider {
     static var previews: some View {
-        DownloadCardView(viewModel: DownloadViewModel()).environmentObject(SettingsViewModel())
+        DownloadCardView(viewModel: DownloadViewModel())
     }
 }

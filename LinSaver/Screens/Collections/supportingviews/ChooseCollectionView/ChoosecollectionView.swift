@@ -51,13 +51,13 @@ struct ChooseCollectionView: View {
            // showInterstetialAds()
         }
     }
-    func showInterstetialAds() {
-        if (interstetialAdsManager.interstitialAdLoaded){
-            let result = interstetialAdsManager.displayInterstitialAd()
-            print(result)
-            //showingAddBookmarkSheet = true
-        }
-    }
+//    func showInterstetialAds() {
+//        if (interstetialAdsManager.interstitialAdLoaded){
+//            let result = interstetialAdsManager.displayInterstitialAd()
+//            print(result)
+//            //showingAddBookmarkSheet = true
+//        }
+//    }
     
     
 }

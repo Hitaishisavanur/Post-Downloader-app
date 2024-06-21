@@ -16,16 +16,23 @@ struct CollectionAlbumView: View {
     @State var customdeleteMediaItem: MediaItem?
     @State var saveMediaItem: MediaItem?
     @State var selectedItems = Set<UUID>()
-    @StateObject var optionalViewModel = VideoPlayerViewModel()
+    @ObservedObject var optionalViewModel = VideoPlayerViewModel()
+    @EnvironmentObject var settingsViewModel: SettingsViewModel
+    private let userViewModel = UserViewModel.shared
     @EnvironmentObject var interstetialAdsManager: InterstitialAdsManager
     let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10)
     ]
+    @State private var saveReward: Bool = false
     
     @StateObject private var rewardedAdManager = RewardedAdManager()
         @State private var showRewardedAd = false
         @State private var rewardAlert = false
+    
+    @State var showCustomAlert = false
+    @State var noInternetAlert = false
+    @State var watchAds = false
     
     @StateObject private var adManager = InterstitialAdsManager()
     @State private var isAdPresented: Bool = false
@@ -43,7 +50,7 @@ struct CollectionAlbumView: View {
                             ForEach(collection.mediaItems, id: \.self) { mediaItem in
                                 let dataModel = viewModel.getMediaItems(id: mediaItem)
                                 Button(action: {
-                                   
+                                    
                                     if isSelecting {
                                         toggleSelection(for: dataModel.id)
                                     } else {
@@ -99,19 +106,32 @@ struct CollectionAlbumView: View {
                                 }.contextMenu{
                                     
                                     if !isSelecting{
-                                        
-                                        
-                                        Button(action: {
-                                            saveMediaItem = viewModel.getMediaItems(id: mediaItem)
-                                            showRewardedAd = true
-                                        }) {
-                                            Label("Save to Photos", systemImage: "square.and.arrow.down")
+                                        if (userViewModel.subscriptionActive){
+                                            Button(action: {
+                                                saveMediaItem = viewModel.getMediaItems(id: mediaItem)
+                                                
+                                                optionalViewModel.saveToPhotos(mediaItem: saveMediaItem!)
+                                                
+                                                
+                                            }) {
+                                                
+                                                Label("Save to Photos", systemImage: "square.and.arrow.down")
+                                                
+                                                
+                                            }
                                             
+                                            
+                                        }else{
+                                            Button(action: {
+                                                saveMediaItem = viewModel.getMediaItems(id: mediaItem)
+                                                checkPhotosPermission()
+//                                                saveReward = true
+//                                                showCustomAlert = true
+                                            })
+                                            {
+                                                Label("Save to Photos - pro", systemImage: "square.and.arrow.down")
+                                            }
                                         }
-                                        
-                                        
-                                        
-                                        
                                         Button(action: {
                                             
                                             customdeleteMediaItem = viewModel.getMediaItems(id: mediaItem)
@@ -136,19 +156,45 @@ struct CollectionAlbumView: View {
                     }
                 }
             }
+            .alert("Error", isPresented: $optionalViewModel.showErrorAlert) {
+               Button("OK") {
+                   optionalViewModel.errorSavetoPhotosMessage = ""
+                   optionalViewModel.showErrorAlert = false
+               }
+           } message: {
+               Text(optionalViewModel.errorSavetoPhotosMessage)
+           }
             
-           
-            
-            .alert(isPresented: $optionalViewModel.showErrorAlert) {
+           .customAlert(isPresented: $showCustomAlert, text: "save"){ didWatchAds in
+                watchAds = didWatchAds
+                if watchAds{
+                    
+                    if rewardedAdManager.adLoaded {
+                        
+                        showRewardedAd = true
+                    } else {
+                        noInternetAlert = true
+                    }
+                }else{
+                    saveReward = false
+                    selectedItems.removeAll()
+                    isSelecting = false
+                    
+                }
+                    
+            }.alert(isPresented: $noInternetAlert) {
+                
                 Alert(
-                    title: Text("Error"),
-                    message: Text(optionalViewModel.errorSavetoPhotosMessage),
-                    dismissButton: .default(Text("OK")){
-                        optionalViewModel.errorSavetoPhotosMessage = ""
-                        optionalViewModel.showErrorAlert = false
+                    title: Text("Failed to load Ad"),
+                    message: Text("Unable to load ad, please check your internet connection and try again after sometimes"),
+                    dismissButton: .destructive(Text("Done")) {
+                        saveReward = false
+                        
+                        noInternetAlert = false
                     }
                 )
             }
+            
             .navigationTitle("\(collection.name)")
             .background(
                 NavigationLink(
@@ -162,7 +208,7 @@ struct CollectionAlbumView: View {
                     }
                 )
             )
-
+            
             .onChange(of: rewardedAdManager.userDidEarnReward) { didEarnReward in
                 if didEarnReward {
                     if (isSelecting){
@@ -178,6 +224,7 @@ struct CollectionAlbumView: View {
                             optionalViewModel.saveToPhotos(mediaItem: saveMediaItem!)
                         }
                     }
+                    saveReward = false
                     rewardAlert = true
                     rewardedAdManager.userDidEarnReward = false // Reset the reward state
                 }
@@ -201,21 +248,87 @@ struct CollectionAlbumView: View {
                     },
                 trailing: HStack {
                     if isSelecting {
-                        Button("Save to Photos") {
-//                            selectedItems.forEach { id in
-//                                let mediaItem = viewModel.getMediaItems(id: id)
-//                                optionalViewModel.saveToPhotos(mediaItem: mediaItem)
-//
-//                            }
-//                            selectedItems.removeAll()
-//                            isSelecting = false
-                            showRewardedAd = true
+                        if(selectedItems.count == 0){
+                           
+                                if (userViewModel.subscriptionActive){
+                                    Button(action: {
+                                        
+                                        
+                                        selectedItems.forEach { id in
+                                            let mediaItem = viewModel.getMediaItems(id: id)
+                                            optionalViewModel.saveToPhotos(mediaItem: mediaItem)
+                                            
+                                        }
+                                        selectedItems.removeAll()
+                                        isSelecting = false
+                                        
+                                    }) {
+                                        Text("Save to Photos")
+                                        
+                                        
+                                    }.disabled(true)
+                                    
+                                    
+                                }else{
+                                    Button(action: {
+                                        checkPhotosPermission()
+                                        //                                saveReward = true
+                                        //                                showCustomAlert = true
+                                    })
+                                    {
+                                        Text("Save to Photos - pro")
+                                    }.disabled(true)
+                                }
+                                
+                                Button("Remove"){
+                                    showAlertforMultiple = true
+                                        
+                                }.disabled(true)
+                                
+                            
+                        }else{
+                            if (userViewModel.subscriptionActive){
+                                Button(action: {
+                                    
+                                    
+                                    selectedItems.forEach { id in
+                                        let mediaItem = viewModel.getMediaItems(id: id)
+                                        optionalViewModel.saveToPhotos(mediaItem: mediaItem)
+                                        
+                                    }
+                                    selectedItems.removeAll()
+                                    isSelecting = false
+                                    
+                                }) {
+                                    Text("Save to Photos")
+                                    
+                                    
+                                }
+                                
+                                
+                            }else{
+                                Button(action: {
+                                    checkPhotosPermission()
+                                    //                                saveReward = true
+                                    //                                showCustomAlert = true
+                                })
+                                {
+                                    Text("Save to Photos - pro")
+                                }
+                            }
+                            
+                            Button("Remove") {
+                                showAlertforMultiple = true
+                            }
+                            .foregroundColor(.red)
+                                             
                         }
-                        Button("Remove") {
-                            showAlertforMultiple = true
-                        }
-                        .foregroundColor(.red)
-                        .alert(isPresented: $showAlertforMultiple) {
+                        
+                        Spacer()
+                        Button("Cancel") {
+                            selectedItems.removeAll()
+                            isSelecting = false
+                        }.alert(isPresented: $showAlertforMultiple) {
                             Alert(
                                 title: Text("Remove From Collection"),
                                 message: Text("Selected files will be removed from this collection, it will still be present in Home Screen and other collections"),
@@ -236,11 +349,6 @@ struct CollectionAlbumView: View {
                                 }
                             )
                         }
-                        Spacer()
-                        Button("Cancel") {
-                            selectedItems.removeAll()
-                            isSelecting = false
-                        }
                     } else {
                         Button("Select") {
                             isSelecting = true
@@ -254,27 +362,32 @@ struct CollectionAlbumView: View {
                     }
                 }
             )
+            
             .sheet(isPresented: $isAddingFiles){
                 let cId = collection.id
                 SelectImagesView(viewModel: CollectionsViewModel(),  cId: cId)
                     .onDisappear{
                         viewModel.fetchCollections()
-                        if adManager.interstitialAdLoaded {
-                                        isAdPresented = true
-                                    } else {
-                                        print("Ad not ready")
-                                    }
+                        if !userViewModel.subscriptionActive {
+                            if adManager.interstitialAdLoaded {
+                                isAdPresented = true
+                            }
+                        } else {
+                            print("Ad not ready")
+                        }
                     }
                 
             }
             .fullScreenCover(isPresented: $isAdPresented) {
-                        InterstitialAdView(adManager: adManager)
-                            .onAppear {
-                                adManager.onAdDismissed = {
-                                    isAdPresented = false
-                                }
+                if adManager.interstitialAdLoaded {
+                    InterstitialAdView(adManager: adManager)
+                        .onAppear {
+                            adManager.onAdDismissed = {
+                                isAdPresented = false
                             }
-                    }
+                        }
+                }
+            }
             .fullScreenCover(isPresented: $openCollectionFile) {
                 if let selectedMediaItem = viewModel.selectedMediaItem {
                     VideoPlayerView(mediaItem: selectedMediaItem, inCollection: true, collectionId: viewModel.cId, viewModel: VideoPlayerViewModel())
@@ -303,20 +416,29 @@ struct CollectionAlbumView: View {
                     }
                 )
             }
-        }.onDisappear(){
-            
-            //showInterstetialAds()
         }
+        
+        
     }
-    func showInterstetialAds() {
-        if (interstetialAdsManager.interstitialAdLoaded){
-            let result = interstetialAdsManager.displayInterstitialAd()
-            print(result)
-            //showingAddBookmarkSheet = true
+    func checkPhotosPermission(){
+        viewModel.checkPhotoLibraryAuthorization { authorized in
+            if authorized {
+                // If permission is granted, save to photos
+                
+                saveReward = true
+                showCustomAlert = true
+            } else {
+                // If permission is denied, show alert and set toggle to false
+                
+                optionalViewModel.errorSavetoPhotosMessage = "Permission denied to access photo library. Please enable it in device settings.\n Go to Settings > LinSaver > Photos > select \"Add Photos Only\""
+                optionalViewModel.showErrorAlert = true
+                isSelecting = false
+                selectedItems.removeAll()
+            }
         }
     }
     
-    private func toggleSelection(for id: UUID?) {
+   private func toggleSelection(for id: UUID?) {
         guard let id = id else { return }
         if selectedItems.contains(id) {
             selectedItems.remove(id)
@@ -325,6 +447,9 @@ struct CollectionAlbumView: View {
         }
     }
 }
+
+
+
 #Preview {
     CollectionAlbumView(collection: MediaCollection(), viewModel: CollectionsViewModel())
 }

@@ -4,7 +4,7 @@ import SwiftUI
 
 
 struct SettingsView: View{
-    @EnvironmentObject var viewModel: SettingsViewModel
+    @StateObject var viewModel = SettingsViewModel()
     
     var body: some View {
         NavigationView {
@@ -22,23 +22,8 @@ struct SettingsView: View{
                     Text("Manage Subscription")
                         .onTapGesture(perform: viewModel.manageSubscription)
                     
-                    Toggle("Save to Camera Roll", isOn: $viewModel.settings.saveToPhotos)
-                                            .onChange(of: viewModel.settings.saveToPhotos) { newValue in
-                                                if !newValue {
-                                                    // Don't show alert when turning off
-                                                    return
-                                                }
-                                                viewModel.checkPhotoLibraryAuthorization { authorized in
-                                                    if authorized {
-                                                        // If permission is granted, save to photos
-                                                        viewModel.saveToPhotosChanged(true)
-                                                    } else {
-                                                        // If permission is denied, show alert and set toggle to false
-                                                        viewModel.saveToPhotosChanged(false)
-                                                        viewModel.showError = true
-                                                    }
-                                                }
-                                            }
+
+                    
                 }
                 
                 Section {
@@ -74,13 +59,28 @@ struct SettingsView: View{
                 }
             }
             .alert(isPresented: $viewModel.showError){
-                Alert(title: Text("ERROR"), message: Text("permission not granted"), dismissButton: .default( Text("OK")))
+                Alert(title: Text(viewModel.errorText), message: Text(viewModel.errorMessage), dismissButton: .default( Text("OK")))
             }
             .navigationTitle("Settings")
             .sheet(isPresented: $viewModel.subscriptionPageShowing){
                 PremiumAdPopup()
             }
+            .sheet(isPresented: $viewModel.showAboutSubscription){
+               AboutSubscriptionView()
+            }
+            
+        }.alert(isPresented: $viewModel.showAboutAlert) {
+            Alert(title: Text("About"), message: Text(viewModel.aboutMessage), dismissButton: .default(Text("OK")))
         }
+        .sheet(isPresented: $viewModel.isShowingShareSheet) {
+            if viewModel.shareAppUrl != "" {
+                if let url = URL(string: viewModel.shareAppUrl){
+                    let image = UIImage(named:"ShareImage")
+                    let text = "Download the LinSaver app to download and manage the images and videos from your favourite social media."
+                    ShareSheet(items: [image, url, text])
+                }
+            }
+        }.loadingOverlay(isPresented: $viewModel.isPurchasing, loadingText: "Restoring Purchases, Please wait")
     }
 }
 

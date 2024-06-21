@@ -6,10 +6,10 @@ import SwiftUI
 class DataController {
     
     static let shared = DataController() // Singleton
-    
+    @Published var isSubscribed: Bool = false
     let container: NSPersistentContainer
-    
-    
+    let userDefaults: UserDefaults
+    @State var subscriptionActive: Bool = false
     
     private init() {
         //        container = NSPersistentContainer(name: "DBmainModel")
@@ -27,6 +27,8 @@ class DataController {
                 fatalError("Failed to load the data \(error.localizedDescription)")
             }
         }
+        userDefaults = UserDefaults(suiteName: "group.com.LinSaver.group")!
+       isSubscribed = userDefaults.bool(forKey: "subscriptionActive")
     }
     
     func save() throws {
@@ -99,6 +101,7 @@ class DataController {
             } else {
                 completion(nil)
             }
+            incrementDownloadCount()
         } catch {
             print(error.localizedDescription)
             completion(error)
@@ -107,6 +110,16 @@ class DataController {
         }
     }
 
+    private func incrementDownloadCount() {
+        let currentCount = userDefaults.integer(forKey: "recordCount")
+        if !isSubscribed{
+            userDefaults.set(currentCount + 1, forKey: "recordCount")
+        }
+    }
+        
+        func getRecordCount() -> Int {
+            return userDefaults.integer(forKey: "recordCount")
+        }
 
 func saveImageToPhotos(url: URL, completion: @escaping (Error?) -> Void) {
     guard let image = UIImage(contentsOfFile: url.path) else {
@@ -178,8 +191,12 @@ func addMediaToCollection(mediaId: UUID, collectionId: UUID) {
     do {
         let collections = try context.fetch(fetchRequest)
         if let collection = collections.first {
-            collection.mediaItems.append(mediaId)
-            try save()
+            if !collection.mediaItems.contains(mediaId) {
+                            collection.mediaItems.append(mediaId)
+                            try save()
+                        } else {
+                            print("Media ID \(mediaId) already exists in the collection.")
+                        }
         }
     } catch {
         print("Error adding media to collection: \(error.localizedDescription)")

@@ -30,7 +30,10 @@ extension PurchasesDelegateHandler: PurchasesDelegate {
     func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
         
         /// - Update our published customerInfo object
-        UserViewModel.shared.customerInfo = customerInfo
+        DispatchQueue.main.async {
+                  UserViewModel.shared.customerInfo = customerInfo
+              }
+        UserViewModel.shared.refreshCustomerInfo() 
     }
 
     /**
@@ -42,7 +45,9 @@ extension PurchasesDelegateHandler: PurchasesDelegate {
                    purchase startPurchase: @escaping StartPurchaseBlock) {
         startPurchase { (transaction, info, error, cancelled) in
             if let info = info, error == nil, !cancelled {
-                UserViewModel.shared.customerInfo = info
+                DispatchQueue.main.async {
+                    UserViewModel.shared.customerInfo = info
+                }
             }
         }
     }

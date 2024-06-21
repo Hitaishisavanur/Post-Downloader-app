@@ -12,9 +12,9 @@ struct BookmarkView: View {
     @State private var isSelectionMode = false
     @State private var deletebookmark: DBbookmark?
     @State private var selectedBookmarks: Set<UUID> = []
-    
+    private let userViewModel = UserViewModel.shared
     @EnvironmentObject var interstetialAdsManager: InterstitialAdsManager
-    
+    @State var exceeds = false
     
     
     var body: some View {
@@ -88,7 +88,7 @@ struct BookmarkView: View {
                                                     .font(.headline)
                                                     .foregroundColor(.white)
                                             }
-                                                
+                                            
                                             
                                             Text(bookmark.date ?? Date(), style: .date)
                                                 .font(.caption)
@@ -116,32 +116,32 @@ struct BookmarkView: View {
                             }) {
                                 HStack{
                                     
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(bookmark.name ?? "No Name")
-                                            .font(.headline)
-                                            .foregroundColor(.primary)
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(bookmark.name ?? "No Name")
+                                                .font(.headline)
+                                                .foregroundColor(.primary)
+                                            
+                                            Text(bookmark.date ?? Date(), style: .date)
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                            
+                                            Text(bookmark.link ?? "No Link")
+                                                .font(.subheadline)
+                                                .lineLimit(1)
+                                                .foregroundColor(.blue)
+                                        }
                                         
-                                        Text(bookmark.date ?? Date(), style: .date)
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
                                         
-                                        Text(bookmark.link ?? "No Link")
-                                            .font(.subheadline)
-                                            .lineLimit(1)
-                                            .foregroundColor(.blue)
+                                        Spacer()
                                     }
-                                    
-                                    
-                                    Spacer()
-                                }
-                            }.opacity(selectedBookmarks.contains(bookmark.bookmarkId ?? UUID()) ? 0.8 : 1.0)
+                                }.opacity(selectedBookmarks.contains(bookmark.bookmarkId ?? UUID()) ? 0.8 : 1.0)
                                     .background(selectedBookmarks.contains(bookmark.bookmarkId ?? UUID()) ? Color.blue.opacity(0.2) : Color.clear)
                                     .cornerRadius(8)
                                     .padding(.vertical, 8)
                             }
                         }
-                         
+                        
                     }
                 }
             }
@@ -154,9 +154,9 @@ struct BookmarkView: View {
                         
                         viewModel.deleteBookmarkbyId(id: deletebookmark!.bookmarkId!)
                         
-                        },
-                        
-                        
+                    },
+                    
+                    
                     
                     secondaryButton: .cancel(){
                         
@@ -168,12 +168,17 @@ struct BookmarkView: View {
             .navigationBarItems(
                 leading: HStack {
                     if isSelectionMode {
-                        
-                        Button("Delete") {
-                            showAlertforMultiple = true
-                            
-                        }.tint(.red)
-                            
+                        if selectedBookmarks.count == 0{
+                            Button("Delete") {
+                                showAlertforMultiple = true
+                                
+                            }.tint(.red)
+                                .disabled(true)
+                        }else{
+                            Button("Delete") {
+                                showAlertforMultiple = true
+                                
+                            }.tint(.red)                        }
                     }
                 }.alert(isPresented: $showAlertforMultiple) {
                     Alert(
@@ -204,19 +209,30 @@ struct BookmarkView: View {
                     }
                     if !isSelectionMode{
                         Button(action: {
-                            
-                            showingAddBookmarkSheet = true
+                            if(viewModel.bookmarks.count < 20 || userViewModel.subscriptionActive ){
+                                showingAddBookmarkSheet = true
+                            }else{
+                                viewModel.buyPro = true
+                            }
                         }) {
                             Image(systemName: "plus")
-                                
-                                
+                            
+                            
                         }
                     }
                 }
                 
             )
             
-        
+            
+        }.onAppear{
+            if !viewModel.isSubscribed{
+                if(viewModel.bookmarks.count > 10){
+                    exceeds = true
+                }else{
+                    exceeds = false
+                }
+            }
         }
         .sheet(isPresented: $showingEditBookmarkSheet) {
             if let selectedbookmarkId = viewModel.selectedBookmark?.bookmarkId{
@@ -226,12 +242,13 @@ struct BookmarkView: View {
         
         .sheet(isPresented: $showingAddBookmarkSheet) {
             AddBookmarkSheetView(viewModel: viewModel)
-                
+            
         }
         
         .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search by name")
         
-                
+        .premiumBadge(isPresented: $exceeds, remainingText: "Free Bookmarks: \(viewModel.bookmarks.count)/20")
+       .exceedAlert(isPresented: $viewModel.buyPro)
     }
     
     private func toggleSelection(for bookmarkId: UUID) {

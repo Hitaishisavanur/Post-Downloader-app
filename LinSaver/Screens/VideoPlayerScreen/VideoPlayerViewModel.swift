@@ -18,12 +18,14 @@ class VideoPlayerViewModel: ObservableObject{
                 DispatchQueue.main.async {
                     if let error = error {
                         if error.localizedDescription == "The operation couldn’t be completed. (PHPhotosErrorDomain error 3311.)"{
-                            self.errorSavetoPhotosMessage = "permission required"
+                            self.errorSavetoPhotosMessage = "Permission denied to access photo library. Please enable it in device settings.\n Go to Settings > LinSaver > Photos > select \"Add Photos Only\""
                             print("give permission to handle save option")
+                            self.showErrorAlert = true
                         }else{
                             self.errorSavetoPhotosMessage = "Error saving image to photo library: \(error.localizedDescription)"
+                            self.showErrorAlert = true
                         }
-                        self.showErrorAlert = true
+                        
                         
                     } else {
                         // Image saved successfully
@@ -34,21 +36,23 @@ class VideoPlayerViewModel: ObservableObject{
         }else{
             
                 dataController.saveVideoToPhotos(url: URL(string: sourceFile)!){error in
-                    DispatchQueue.main.async {
+                 DispatchQueue.main.async {
                     if let error = error {
                         // Handle error
                         if error.localizedDescription == "The operation couldn’t be completed. (PHPhotosErrorDomain error 3311.)"{
-                            self.errorSavetoPhotosMessage = "permission required"
+                            self.errorSavetoPhotosMessage = "Permission denied to access photo library. Please enable it in device settings.\n Go to Settings > LinSaver > Photos > select \"Add Photos Only\""
                             print("give permission to handle save option")
+                            self.showErrorAlert = true
                         }else{
                             self.errorSavetoPhotosMessage = "Error saving video to photo library: \(error.localizedDescription)"
+                            self.showErrorAlert = true
                         }
-                        self.showErrorAlert = true
+                        
                     } else {
                         // Image saved successfully
                         print("Video saved to photo library successfully.")
                     }
-                }
+               }
             }
         }
     }

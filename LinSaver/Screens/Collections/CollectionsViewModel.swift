@@ -2,6 +2,7 @@
 
 import SwiftUI
 import CoreData
+import Photos
 
 class CollectionsViewModel: ObservableObject {
     
@@ -13,6 +14,16 @@ class CollectionsViewModel: ObservableObject {
     @Published var selectedCollectionforEdit: MediaCollection?
     @Published var searchText: String = ""
     @Published var dataModels: [DBmain] = []
+    @Published var isSubscribed: Bool = false
+    @Published var buyPro = false
+    private let userViewModel = UserViewModel.shared
+    @Published var exceeds = false
+    
+    init(){
+        isSubscribed = userViewModel.subscriptionActive
+        
+    }
+    
     
     func fetchCollections() {
         collections = dataController.fetchCollections()
@@ -174,4 +185,19 @@ class CollectionsViewModel: ObservableObject {
     func moveToCollection(mediaItemId: UUID, collectionId: UUID){
         dataController.addMediaToCollection(mediaId: mediaItemId, collectionId: collectionId)
     }
+    func checkPhotoLibraryAuthorization(completion: @escaping (Bool) -> Void) {
+           let status = PHPhotoLibrary.authorizationStatus()
+           switch status {
+           case .authorized, .limited:
+               completion(true)
+           case .denied, .restricted:
+               completion(false)
+           case .notDetermined:
+               PHPhotoLibrary.requestAuthorization(for: .addOnly) { newStatus in
+                   completion(newStatus == .authorized)
+               }
+           @unknown default:
+               completion(false)
+           }
+       }
 }

@@ -9,6 +9,7 @@ struct AddBookmarkSheetView: View {
     @State private var link: String = ""
     @State var showError = false
     @EnvironmentObject var interstetialAdsManager: InterstitialAdsManager
+    private let userViewModel = UserViewModel.shared
     
     var body: some View {
         NavigationView {
@@ -61,8 +62,9 @@ struct AddBookmarkSheetView: View {
                 showError = false
             })
         }.onDisappear(){
-          
-            showInterstetialAds()
+            if(!userViewModel.subscriptionActive)&&(interstetialAdsManager.interstitialAdLoaded){
+                showInterstetialAds()
+            }
         }
     }
     func showInterstetialAds() {

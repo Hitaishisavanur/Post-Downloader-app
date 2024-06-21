@@ -9,7 +9,9 @@ struct CollectionsView: View {
     @State var showingAlbum:Bool = false
     @State var showAlert:Bool = false
     @State private var displayImages: [UUID: [UIImage]] = [:]
-
+    private let userViewModel = UserViewModel.shared
+    @State var exceeds = false
+    
     var body: some View {
         NavigationView {
             ZStack{
@@ -145,18 +147,30 @@ struct CollectionsView: View {
             .onAppear {
                 viewModel.fetchCollections()
                 refreshDisplayImages()
+                if !viewModel.isSubscribed{
+                    if(viewModel.collections.count > 1){
+                        exceeds = true
+                    }else{
+                        exceeds = false
+                    }
+                }
             }
             .navigationTitle("Collections")
             .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search by name")
             .toolbar {
                 Button {
-                    showingAddCollectionAlert = true
+                    if((viewModel.collections.count < 3 )||(userViewModel.subscriptionActive)){
+                        showingAddCollectionAlert = true
+                    }else{
+                        viewModel.buyPro = true
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
                 
             }
-        }
+        }.premiumBadge(isPresented: $exceeds , remainingText: "Free Collections: \(viewModel.collections.count)/3")
+           .exceedAlert(isPresented: $viewModel.buyPro)
     }
 
     private func refreshDisplayImages() {

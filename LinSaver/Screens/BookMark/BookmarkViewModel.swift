@@ -8,10 +8,19 @@ class BookmarkViewModel: ObservableObject {
     @Published var selectedBookmark: DBbookmark?
     @Published var adShown: String = ""
     private let dataController = DataController.shared
-    
+    @Published var exceeds = false
+    @Published var isSubscribed: Bool = false
+    @Published var buyPro = false
+    private let userViewModel = UserViewModel.shared
     
     init() {
         fetchBookmarks()
+        isSubscribed = userViewModel.subscriptionActive
+//        if !isSubscribed{
+//            if(bookmarks.count > 15){
+//                exceeds = true
+//            }
+//        }
     }
     
     func fetchBookmarks() {

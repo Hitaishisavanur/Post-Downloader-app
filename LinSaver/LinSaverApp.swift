@@ -6,18 +6,22 @@ import RevenueCat
 @main
 struct LinSaverApp: App {
     let dataController = DataController.shared
-    @StateObject var viewModel = SettingsViewModel()
+    
     @StateObject var InterstetialAdsManager = InterstitialAdsManager()
+    @StateObject var userViewModel = UserViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
+  
     
     var body: some Scene {
         WindowGroup {
             BottomTabView()
                 .environment(\.managedObjectContext, dataController.container.viewContext)
-                .environmentObject(viewModel)
                 .environmentObject(InterstetialAdsManager)
+                .environmentObject(userViewModel)
                 .task {
                                    do {
+                                      
                                        // Fetch the available offerings
                                        UserViewModel.shared.offerings = try await Purchases.shared.offerings()
                                    } catch {
@@ -28,6 +32,7 @@ struct LinSaverApp: App {
                     InterstetialAdsManager.loadInterstitialAd()
                                  
                 }
+             
         }
         
         
@@ -37,19 +42,17 @@ struct LinSaverApp: App {
            Purchases.configure(withAPIKey: "appl_KYZchksyZjhiNulOeNNgcpTCSPE")
         
         Purchases.shared.delegate = PurchasesDelegateHandler.shared
+        _ = UserViewModel.shared// Initialize the user view model
+         
+                    
+            
         
     }
 }
 class AppDelegate:NSObject,UIApplicationDelegate,UNUserNotificationCenterDelegate{
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         GADMobileAds.sharedInstance().start()
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                    if granted {
-                        print("Notification permissions granted.")
-                    } else if let error = error {
-                        print("Notification permission error: \(error)")
-                    }
-                }
+    
         return true
     }
     

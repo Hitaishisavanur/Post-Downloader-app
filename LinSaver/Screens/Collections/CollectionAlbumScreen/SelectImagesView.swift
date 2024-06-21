@@ -87,18 +87,10 @@ struct SelectImagesView: View {
             viewModel.fetchFiles()
             viewModel.observeChanges()
            
-        }.onDisappear(){
-                  // showInterstetialAds()
         }
         
     }
-    func showInterstetialAds() {
-        if (interstetialAdsManager.interstitialAdLoaded){
-            interstetialAdsManager.displayInterstitialAd()
-            
-            //showingAddBookmarkSheet = true
-        }
-    }
+    
     
 
     private func toggleSelection(for id: UUID?) {

@@ -2,22 +2,51 @@
 
 import SwiftUI
 import SwiftSoup
+import Photos
 
 class DownloadViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var showErrorAlert: Bool = false
-    @Published var errorMessage: String? = nil
-    @EnvironmentObject var saveViewModel: SettingsViewModel
-
+    @Published var errorMessage: String?
+    @Published var errorMessageExt: String = ""
+    @Published var isDownloading = false
+    @Published var isDownloadingAndSaving = false
+    @Published var downloadCount: Int
+    private let dataController = DataController.shared
     var viewModel = DataManagerViewModel()
+    @Published var urls: String? = nil
+    
+    
+  
+    
+    
+    init(){
+        self.downloadCount = dataController.getRecordCount()
+    }
 
     func pasteButtonTapped() {
         if let text = UIPasteboard.general.string {
             self.text = text
         }
     }
+    func checkPhotoLibraryAuthorization(completion: @escaping (Bool) -> Void) {
+           let status = PHPhotoLibrary.authorizationStatus()
+           switch status {
+           case .authorized, .limited:
+               completion(true)
+           case .denied, .restricted:
+               completion(false)
+           case .notDetermined:
+               PHPhotoLibrary.requestAuthorization(for: .addOnly) { newStatus in
+                   completion(newStatus == .authorized)
+               }
+           @unknown default:
+               completion(false)
+           }
+       }
 
     func downloadButtonTapped(saveToPhotos: Bool) {
+        
         downloadHTML(text: text, saveToPhotos: saveToPhotos)
     }
 
@@ -33,7 +62,14 @@ class DownloadViewModel: ObservableObject {
         var displayImageURL: URL?
 
         URLSession.shared.dataTask(with: url) { data, response, error in
+            if(saveToPhotos){
+                self.isDownloadingAndSaving = true
+            }else{
+                self.isDownloading = true
+            }
             guard let data = data, error == nil else {
+                self.isDownloading = false
+                self.isDownloadingAndSaving = false
                 self.showError("Failed to download HTML: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
@@ -56,6 +92,8 @@ class DownloadViewModel: ObservableObject {
                                         case .success(let destinationURL):
                                             sourceURL = destinationURL
                                         case .failure(let error):
+                                            self.isDownloading = false
+                                            self.isDownloadingAndSaving = false
                                             self.showError("Error downloading video: \(error.localizedDescription)")
                                         }
                                         group.leave()
@@ -72,6 +110,8 @@ class DownloadViewModel: ObservableObject {
                                         case .success(let destinationURL):
                                             displayImageURL = destinationURL
                                         case .failure(let error):
+                                            self.isDownloading = false
+                                            self.isDownloadingAndSaving = false
                                             self.showError("Error downloading image: \(error.localizedDescription)")
                                         }
                                         group.leave()
@@ -90,6 +130,8 @@ class DownloadViewModel: ObservableObject {
                                                 displayImageURL = destinationURL
                                                 sourceURL = destinationURL
                                             case .failure(let error):
+                                                self.isDownloading = false
+                                                self.isDownloadingAndSaving = false
                                                 self.showError("Error downloading image: \(error.localizedDescription)")
                                             }
                                             group.leave()
@@ -104,14 +146,28 @@ class DownloadViewModel: ObservableObject {
                         if let displayImageURL = displayImageURL, let sourceURL = sourceURL {
                             self.viewModel.writeDownloadsToFolder(displayURLs: displayImageURL, sourceURLs: sourceURL, saveToPhotos: saveToPhotos, link: text) { error in
                                 if let error = error {
+                                    self.isDownloading = false
+                                    self.isDownloadingAndSaving = false
                                     self.showError("Error writing downloads to folder: \(error.localizedDescription)")
+                                }else{
+                                    self.isDownloading = false
+                                    self.isDownloadingAndSaving = false
+                                    if(self.urls == nil){
+                                        
+                                    }else{
+                                        
+                                    }
                                 }
                             }
                         } else {
+                            self.isDownloading = false
+                            self.isDownloadingAndSaving = false
                             self.showError("Error downloading, please check url.\n OR \n Unsupported format.\n If its a bug, kindly contact us")
                         }
                     }
                 } catch let error {
+                    self.isDownloading = false
+                    self.isDownloadingAndSaving = false
                     self.showError("Error parsing HTML: \(error.localizedDescription)")
                 }
             }
@@ -119,9 +175,14 @@ class DownloadViewModel: ObservableObject {
     }
 
      func showError(_ message: String) {
-        DispatchQueue.main.async {
-            self.errorMessage = message
-            self.showErrorAlert = true
-        }
+         
+         if(urls == nil){
+             DispatchQueue.main.async {
+                 self.errorMessage = message
+                 self.showErrorAlert = true
+             }
+         }else{
+             errorMessageExt = message
+         }
     }
 }

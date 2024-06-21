@@ -8,34 +8,62 @@ struct PremiumAdPopup: View {
     
     @State var showBottomsheet: Bool = false
     
-     
-    /// - State for displaying an overlay view
+    @StateObject var settingsViewModel = SettingsViewModel()
+    @State private var eligibility: [String: IntroEligibility] = [:]    /// - State for displaying an overlay view
     @State
-    private(set) var isPurchasing: Bool = false
-    
+   // private(set)
+    var isPurchasing: Bool = false
+    @Environment(\.presentationMode) var presentationMode
     /// - The current offering saved from PurchasesDelegateHandler
     private(set) var currentOffering: Offering? = UserViewModel.shared.offerings?.current
     @State var selectedOption: Package?  // private let footerText = "Don't forget to add your subscription terms and conditions. Read more about this here: //https://www.revenuecat.com/blog/schedule-2-section-3-8-b"
-    
+
+
     @State private var error: NSError?
     @State private var displayError: Bool = false
     
     var body: some View {
         VStack {
+            HStack{
+                VStack{}
+                Spacer()
+                VStack{
+                    Button{
+                        presentationMode.wrappedValue.dismiss()
+                    }label: {
+                        Image(systemName: "x.circle.fill")
+                            .resizable()
+                            
+                            .frame(width: 30,height: 30)
+                            .padding()
+                    }
+                }
+            }
             ScrollView{
                 
                 VStack{
                     VStack{
-                        Text("How your free")
-                            .font(.title)
-                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                        Text("trial works")
-                            .font(.title)
-                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                            Text("How your free")
+                                .font(.title)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Text("trial works")
+                                .font(.title)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        }else{
+                            Text("Subscribe Now!!")
+                                .font(.title)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+//                            Text("Today")
+//                                .font(.title)
+//                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        }
                     }.padding(.top,30)
                         .padding(.bottom,25)
                     VStack(alignment: .leading){
+                    
                         HStack{
+                            if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
                             VStack{
                                 Image(systemName: "lock.fill")
                                 
@@ -45,57 +73,131 @@ struct PremiumAdPopup: View {
                                     .frame(width: 35,height:35)
                                     .padding(4)
                             }
-                            VStack(alignment: .leading){
-                                Text("Today")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("Get Ad-Free experience with unlimited downloads, bookmarks and collection creations")
-                                    .font(.subheadline)
+                                VStack(alignment: .leading){
+                                    Text("Today")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                    VStack(alignment: .leading){
+                                        
+                                        Text("Get Ad-Free experience.")
+                                            .fontWeight(.bold)
+                                        Text("Get unlimited downloads, bookmarks and collection creations.")
+                                            .fontWeight(.bold)
+                                        Text("Directly download and save to photos.")
+                                            .fontWeight(.bold)
+                                    }.font(.subheadline)
+                                    
+                                    
+                                }
                                 
+                            }else{
                                 
-                            }
+                                    VStack(alignment: .leading){
+//                                        Text("Today")
+//                                            .font(.title2)
+//                                            .fontWeight(.semibold)
+                                        VStack(alignment: .leading){
+                                            HStack{
+                                                VStack(alignment: .leading){
+                                                    Image(systemName: "star.fill")
+                                                    
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .foregroundColor(.blue)
+                                                        .frame(width: 35,height:35)
+                                                        .padding(4)
+                                                }
+                                                VStack{
+                                                    Text("Get Ad-Free experience.")
+                                                        .padding(.leading,10)
+                                                }
+                                            }
+                                            
+                                                
+                                            HStack{
+                                                VStack(alignment: .leading){
+                                                    Image(systemName: "star.fill")
+                                                    
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .foregroundColor(.blue)
+                                                        .frame(width: 35,height:35)
+                                                        .padding(4)
+                                                }
+                                                VStack{
+                                                    Text("Get unlimited downloads, bookmarks and collection creations.")
+                                                        .padding(.leading,10)
+                                                        }
+                                            }
+
+                                            HStack{
+                                                VStack(alignment: .leading){
+                                                    Image(systemName: "star.fill")
+                                                    
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .foregroundColor(.blue)
+                                                        .frame(width: 35,height:35)
+                                                        .padding(4)
+                                                }
+                                                VStack{
+                                                    Text("Directly download and save to photos.")
+                                                        .padding(.leading,10)
+                                                        }
+                                            }
+                                        }.font(.title2)
+                                        
+                                        
+                                    }
+                                                                }
                         }.padding(.bottom,15)
-                        HStack{
-                            VStack{
-                                Image(systemName: "bell.badge.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                                    .frame(width: 35,height:35)
-                                    .padding(4)
-                            }
-                            VStack(alignment: .leading){
-                                Text("Day 5")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("You will get a notification that your trial is ending")
-                                    .font(.subheadline)
-                                
-                                
-                            }
-                        }.padding(.bottom,15)
-                        HStack{
-                            VStack{
-                                Image(systemName: "checkmark.seal.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.green)
-                                    .frame(width: 35,height:35)
-                                    .padding(4)
-                            }
-                            VStack(alignment: .leading){
-                                Text("Day 7")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("Your subscription starts, cancel anytime before")
-                                    .font(.subheadline)
-                                
+                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                            HStack{
+                                VStack{
+                                    Image(systemName: "bell.badge.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                        .frame(width: 35,height:35)
+                                        .padding(4)
+                                }
+                                VStack(alignment: .leading){
+                                    Text("Day 5")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                    Text("You will get a notification that your trial is ending")
+                                        .font(.subheadline)
+                                    
+                                    
+                                }
+                            }.padding(.bottom,15)
+                            HStack{
+                                VStack{
+                                    Image(systemName: "checkmark.seal.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(.green)
+                                        .frame(width: 35,height:35)
+                                        .padding(4)
+                                }
+                                VStack(alignment: .leading){
+                                    Text("Day 7")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                    Text("Your subscription starts, cancel anytime before")
+                                        .font(.subheadline)
+                                    
+                                }
                             }
                         }
                         
                     }.padding(.bottom,20)
                     Divider()
-                    
+                    VStack(alignment:.leading){
+                        Text("Auto-Renews,Free trial for first purchase only")
+                            .font(.caption)
+                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    }
                     VStack(alignment:.leading){
                         Text("How can I cancel")
                             .font(.caption)
@@ -124,7 +226,7 @@ struct PremiumAdPopup: View {
                                 VStack(alignment: .leading) {
                                     
                                     Button(action: {
-                                       selectedOption = pkg
+                                        selectedOption = pkg
                                     }) {
                                         PackageView(package: pkg, isSelected: selectedOption == pkg)
                                     }
@@ -135,7 +237,12 @@ struct PremiumAdPopup: View {
                             
                             else{
                                 if (pkg.storeProduct.productIdentifier ==  "LinSaver_0399_1y_1wO" ){
-                                    Text("First 1 week free, then \(pkg.storeProduct.localizedPriceString )")}
+                                    if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                                        Text("First 1 week free, then \(pkg.storeProduct.localizedPriceString )/year")
+                                    }else{
+                                        Text("Buy Pro at \(pkg.storeProduct.localizedPriceString )/year, Auto-Renews")
+                                    }
+                                }
                             }
                         }
                     }
@@ -143,80 +250,94 @@ struct PremiumAdPopup: View {
                     
                 }
                 VStack{
-                    
-                    Button{
-                       
-                        isPurchasing = true
-                        Task{
-                            /// - Purchase a package
+                    if currentOffering != nil{
+                        Button{
+                            purchaseButton()
                             
-                            do {
-                                if(selectedOption != nil){}else{selectedOption = currentOffering?.package(identifier: "$rc_annual")}
-                                    let result = try await Purchases.shared.purchase(package: selectedOption!)
-                                    
-                                    /// - Set 'isPurchasing' state to `false`
-                                    self.isPurchasing = false
-                              
-                                    if !result.userCancelled {
-                                        self.showBottomsheet = false
-                                        let customerInfoNotification = try await Purchases.shared.customerInfo()
-                                        if let entitlement = customerInfoNotification.entitlements.all["pro"], entitlement.isActive {
-                                            if selectedOption == currentOffering?.package(identifier: "$rc_annual"){
-                                                UserViewModel().addSubscription()
-                                                
-                                            }
-                                        }
-                                    }
-                            } catch {
-                                self.isPurchasing = false
-                                self.error = error as NSError
-                                self.displayError = true
+                        }
+                    label:{
+                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                            if showBottomsheet == false{Text("Start Free Trial")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .padding(7)
+                                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                            }else{
+                                if ((selectedOption?.storeProduct.productIdentifier) != "LinSaver_0399_1y_1wO") && (selectedOption != nil) {Text("Continue")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .padding(7)
+                                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                                }else if((selectedOption?.storeProduct.productIdentifier) == "LinSaver_0399_1y_1wO"){
+                                    Text("Start Free Trial")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .padding(7)
+                                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                                }
                             }
-                        }
-                    }
-                label:{if currentOffering != nil{
-                    
-                    if showBottomsheet == false{Text("Start Free Trial")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .padding(7)
-                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    }else{
-                        if ((selectedOption?.storeProduct.productIdentifier) != "LinSaver_0399_1y_1wO") && (selectedOption != nil) {Text("Continue")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .padding(7)
-                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                        }else if((selectedOption?.storeProduct.productIdentifier) == "LinSaver_0399_1y_1wO"){
-                            Text("Start Free Trial")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .padding(7)
-                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                         }else{
-                            Text("Select Subscription")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .padding(7)
-                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                            if showBottomsheet == false{Text("Subscribe")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .padding(7)
+                                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                            }else{
+                                if ((selectedOption?.storeProduct.productIdentifier) != "LinSaver_0399_1y_1wO") && (selectedOption != nil) {Text("Continue")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .padding(7)
+                                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                                }else if((selectedOption?.storeProduct.productIdentifier) == "LinSaver_0399_1y_1wO"){
+                                    Text("Subscribe")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .padding(7)
+                                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                                }
+                            }                        }
+                    }.buttonStyle(BorderedProminentButtonStyle())
+                    }else{
+                        Button{
+                            purchaseButton()
                             
                         }
-                    }}else{
-                    ProgressView()
+                    label:{
+                        ProgressView()
                             .font(.title2)
                             .tint(.primary)
                             .padding(7)
                             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                    }.buttonStyle(BorderedProminentButtonStyle())
+                            .disabled(true)
+                        
                     }
-                        
-                }.buttonStyle(BorderedProminentButtonStyle())
-                        
+                    
                     
                 }
                 VStack{
                     HStack{
                         VStack{
-                            Button{showBottomsheet.toggle()}label:{Text("All plans")}
+                            if(currentOffering != nil){
+                                Button{
+                                    
+                                    selectedOption = currentOffering?.annual
+                                    showBottomsheet.toggle()
+                                }
+                                
+                            label:{Text("All plans")}
+                            }
+                            else{
+                                Button{
+                                    
+                                    selectedOption = currentOffering?.annual
+                                    showBottomsheet.toggle()
+                                }
+                                
+                            label:{Text("All plans")}
+                                    .disabled(true)
+                            }
+                                   
                         }
                         VStack{Text(".")
                                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
@@ -225,10 +346,31 @@ struct PremiumAdPopup: View {
                         }
                         VStack{
                             HStack{
-                                Button{}label:{Text("Restore")}}
+                                Text("Restore")}
                             HStack{
-                                Button{}label:{Text("purchases")}}
+                                Text("purchases")}
                             
+                        } .foregroundStyle(.blue)
+                            .onTapGesture {
+                               
+                                settingsViewModel.restorePurchase()
+                            }
+                        VStack{Text(".")
+                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                .padding(.bottom)
+                        }
+                        VStack{
+                            VStack{
+                                HStack{
+                                    Text("Terms")}
+                                HStack{
+                                    Text("of use")}
+                                
+                            } .foregroundStyle(.blue)
+                                .onTapGesture {
+                                    settingsViewModel.showTermsOfUse()
+                                }
                         }
                         VStack{Text(".")
                                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
@@ -238,37 +380,92 @@ struct PremiumAdPopup: View {
                         VStack{
                             VStack{
                                 HStack{
-                                    Button{}label:{Text("Terms and")}}
+                                    Text("Privacy")}
                                 HStack{
-                                    Button{}label:{Text("conditions")}}
+                                    Text("policy")}
                                 
                             }
-                        }
-                        VStack{Text(".")
-                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                .padding(.bottom)
-                        }
-                        VStack{
-                            VStack{
-                                HStack{
-                                    Button{}label:{Text("Privacy")}}
-                                HStack{
-                                    Button{}label:{Text("policy")}}
-                                
+                            .foregroundStyle(.blue)
+                            .onTapGesture {
+                                settingsViewModel.showPrivacyPolicy()
                             }
                         }
                     }.font(.footnote)
                 } //.foregroundColor(.black)
             }.padding(.horizontal,20)
                 .padding(.top,10)
+                
             
-        
-        }.onAppear{
+        }
+               
+            
+        .onAppear{
             selectedOption = currentOffering?.annual
         }
+        .restorePurchaseAlert(isPresented: $settingsViewModel.showError, alertText: settingsViewModel.errorMessage, onDismiss: onDismissError)
+        .loadingOverlay(isPresented: $settingsViewModel.isPurchasing, loadingText: "Restoring Purchases, Please wait")
+        .loadingOverlay(isPresented: $isPurchasing, loadingText: "Loading, Please wait")
     }
+    func requestNotificationPermission() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("Notification permission error: \(error.localizedDescription)")
+            }
+            if granted {
+                print("Notification permission granted")
+            } else {
+                print("Notification permission denied")
+            }
+        }
+    }
+    func purchaseButton(){
+        isPurchasing = true
+        Task{
+            /// - Purchase a package
+            
+            do {
+                if(selectedOption != nil){}else{selectedOption = currentOffering?.package(identifier: "$rc_annual")}
+                if(selectedOption == currentOffering?.package(identifier: "$rc_annual")){
+                    requestNotificationPermission()
+                }
+                let result = try await Purchases.shared.purchase(package: selectedOption!)
+                
+                /// - Set 'isPurchasing' state to `false`
+                self.isPurchasing = false
+                
+                if !result.userCancelled {
+                    self.showBottomsheet = false
+                    let customerInfoNotification = try await Purchases.shared.customerInfo()
+                    if let entitlement = customerInfoNotification.entitlements.all["pro"], entitlement.isActive {
+                        if selectedOption == currentOffering?.package(identifier: "$rc_annual"){
+                            UserViewModel().addSubscription()
+                            
+                        }
+                    }
+                }
+            } catch {
+                self.isPurchasing = false
+                self.error = error as NSError
+                self.displayError = true
+            }
+        }
+        
+    }
+    
+    func checkEligibility() async {
+        guard let offering = currentOffering else { return }
+        let productIdentifiers = offering.availablePackages.map { $0.storeProduct.productIdentifier }
+        Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: ["LinSaver_0399_1y_1wO"]){ eligibility in
+            self.eligibility = eligibility
+        }
+    }
+    func onDismissError(){
+        settingsViewModel.showError = false
+    }
+
 }
+
 struct PackageView: View {
     let package: Package
     let isSelected: Bool

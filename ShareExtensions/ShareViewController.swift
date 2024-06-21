@@ -1,9 +1,16 @@
+//
+//  ShareViewController.swift
+//  ShareExtensions
+//
+//  Created by Hitaishi Savanur on 20/06/24.
+//
+
 import UIKit
 import SwiftUI
 
 class ShareViewController: UIViewController {
     @Published private var sharedURL: String?
-    private let settingsViewModel = SettingsViewModel()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +36,8 @@ class ShareViewController: UIViewController {
 //        let downloadViewModel = DownloadViewModel(url: sharedURL)
         let rootView = NavigationView {
             ShareView(sharedURL: sharedURL)
-                .environmentObject(settingsViewModel)
                 .navigationBarItems(leading: Button("Cancel") {
-                    self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+                    self.closer()
                 })
         }
 
@@ -48,12 +54,15 @@ class ShareViewController: UIViewController {
         ])
         hostingController.didMove(toParent: self)
     }
+    func closer(){
+        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+    }
 }
 
 
 struct ShareView: View {
     @State var sharedURL: String?
-    @EnvironmentObject var settingsViewModel: SettingsViewModel
+    
 
     var body: some View {
         if sharedURL != nil {

@@ -1,25 +1,35 @@
 import Foundation
+import Photos
 import UIKit
 import CoreData
 
 class HomeScreenViewModel: ObservableObject {
     @Published var buyPremium: Bool = false
-    @Published var openMedia: Bool = false
-    @Published var isShowingCardView = false
+    @Published var downloadCount: Int
+  @Published var isShowingDownloader = false
     @Published var dataModels: [DBmain] = []
     @Published var selectedMediaItem: MediaItem?
+    @Published var exceeds: Bool = false
+    @Published var buyPro: Bool = false
+    @Published var isSubscribed: Bool = false
+    private let userViewModel = UserViewModel.shared
     private let dataController = DataController.shared
     
     init() {
-        fetchFiles()
-        observeChanges()
+        
+      downloadCount = dataController.getRecordCount()
+        self.fetchFiles()
+       self.observeChanges()
+        isSubscribed = userViewModel.subscriptionActive
+        if !isSubscribed{
+            if(downloadCount > 10){
+                exceeds = true
+            }
+        }
+          
         
     }
     
-    
-    func toggleCardView() {
-        isShowingCardView.toggle()
-    }
     
     func buyPremiumAction() {
         buyPremium.toggle()
@@ -67,6 +77,20 @@ class HomeScreenViewModel: ObservableObject {
     }
     
     
-    
+    func checkPhotoLibraryAuthorization(completion: @escaping (Bool) -> Void) {
+           let status = PHPhotoLibrary.authorizationStatus()
+           switch status {
+           case .authorized, .limited:
+               completion(true)
+           case .denied, .restricted:
+               completion(false)
+           case .notDetermined:
+               PHPhotoLibrary.requestAuthorization(for: .addOnly) { newStatus in
+                   completion(newStatus == .authorized)
+               }
+           @unknown default:
+               completion(false)
+           }
+       }
     
 }
