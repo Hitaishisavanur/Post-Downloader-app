@@ -9,7 +9,7 @@ struct PremiumAdPopup: View {
     @State var showBottomsheet: Bool = false
     
     @StateObject var settingsViewModel = SettingsViewModel()
-    @State private var eligibility: [String: IntroEligibility] = [:]    /// - State for displaying an overlay view
+    @State private var trialEligibility: [String: IntroEligibility] = [:]    /// - State for displaying an overlay view
     @State
    // private(set)
     var isPurchasing: Bool = false
@@ -18,9 +18,10 @@ struct PremiumAdPopup: View {
     private(set) var currentOffering: Offering? = UserViewModel.shared.offerings?.current
     @State var selectedOption: Package?  // private let footerText = "Don't forget to add your subscription terms and conditions. Read more about this here: //https://www.revenuecat.com/blog/schedule-2-section-3-8-b"
 
-
+    let crashlyticsManager = CrashlyticsManager.shared
     @State private var error: NSError?
     @State private var displayError: Bool = false
+    @State var isNotEligibleForTrial = UserDefaults.standard.bool(forKey: "ineligible")
     
     var body: some View {
         VStack {
@@ -43,7 +44,9 @@ struct PremiumAdPopup: View {
                 
                 VStack{
                     VStack{
-                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+//                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                       // if trialEligibility["LinSaver_0399_1y_1wO"]?.status != .ineligible {
+                        if !isNotEligibleForTrial{
                             Text("How your free")
                                 .font(.title)
                                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
@@ -51,19 +54,19 @@ struct PremiumAdPopup: View {
                                 .font(.title)
                                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                         }else{
-                            Text("Subscribe Now!!")
+                            Text("Get Premium!!")
                                 .font(.title)
                                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-//                            Text("Today")
-//                                .font(.title)
-//                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+
                         }
                     }.padding(.top,30)
                         .padding(.bottom,25)
                     VStack(alignment: .leading){
                     
                         HStack{
-                            if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+//                            if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                           // if trialEligibility["LinSaver_0399_1y_1wO"]?.status != .ineligible {
+                            if !isNotEligibleForTrial{
                             VStack{
                                 Image(systemName: "lock.fill")
                                 
@@ -103,7 +106,7 @@ struct PremiumAdPopup: View {
                                                     
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
-                                                        .foregroundColor(.blue)
+                                                        .foregroundColor(.accent)
                                                         .frame(width: 35,height:35)
                                                         .padding(4)
                                                 }
@@ -120,7 +123,7 @@ struct PremiumAdPopup: View {
                                                     
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
-                                                        .foregroundColor(.blue)
+                                                        .foregroundColor(.accent)
                                                         .frame(width: 35,height:35)
                                                         .padding(4)
                                                 }
@@ -136,7 +139,7 @@ struct PremiumAdPopup: View {
                                                     
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
-                                                        .foregroundColor(.blue)
+                                                        .foregroundColor(.accent)
                                                         .frame(width: 35,height:35)
                                                         .padding(4)
                                                 }
@@ -151,7 +154,9 @@ struct PremiumAdPopup: View {
                                     }
                                                                 }
                         }.padding(.bottom,15)
-                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+              //          if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+               //         if trialEligibility["LinSaver_0399_1y_1wO"]?.status != .ineligible {
+                        if !isNotEligibleForTrial{
                             HStack{
                                 VStack{
                                     Image(systemName: "bell.badge.fill")
@@ -237,7 +242,9 @@ struct PremiumAdPopup: View {
                             
                             else{
                                 if (pkg.storeProduct.productIdentifier ==  "LinSaver_0399_1y_1wO" ){
-                                    if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                                   // if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                                 //   if trialEligibility["LinSaver_0399_1y_1wO"]?.status != .ineligible {
+                                    if !isNotEligibleForTrial{
                                         Text("First 1 week free, then \(pkg.storeProduct.localizedPriceString )/year")
                                     }else{
                                         Text("Buy Pro at \(pkg.storeProduct.localizedPriceString )/year, Auto-Renews")
@@ -256,7 +263,9 @@ struct PremiumAdPopup: View {
                             
                         }
                     label:{
-                        if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                  //      if let eligibility = eligibility["LinSaver_0399_1y_1wO"]?.status, eligibility == .eligible {
+                    //    if trialEligibility["LinSaver_0399_1y_1wO"]?.status != .ineligible {
+                        if !isNotEligibleForTrial{
                             if showBottomsheet == false{Text("Start Free Trial")
                                     .font(.title2)
                                     .fontWeight(.semibold)
@@ -296,7 +305,9 @@ struct PremiumAdPopup: View {
                                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                                 }
                             }                        }
-                    }.buttonStyle(BorderedProminentButtonStyle())
+                    }
+                    .tint(.accent)
+                    .buttonStyle(BorderedProminentButtonStyle())
                     }else{
                         Button{
                             purchaseButton()
@@ -308,7 +319,8 @@ struct PremiumAdPopup: View {
                             .tint(.primary)
                             .padding(7)
                             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    }.buttonStyle(BorderedProminentButtonStyle())
+                    }
+                    .buttonStyle(BorderedProminentButtonStyle())
                             .disabled(true)
                         
                     }
@@ -400,7 +412,11 @@ struct PremiumAdPopup: View {
                
             
         .onAppear{
+            checkEligibility()
             selectedOption = currentOffering?.annual
+            
+                
+            
         }
         .restorePurchaseAlert(isPresented: $settingsViewModel.showError, alertText: settingsViewModel.errorMessage, onDismiss: onDismissError)
         .loadingOverlay(isPresented: $settingsViewModel.isPurchasing, loadingText: "Restoring Purchases, Please wait")
@@ -410,12 +426,10 @@ struct PremiumAdPopup: View {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
-                print("Notification permission error: \(error.localizedDescription)")
+                crashlyticsManager.addLog(message: error.localizedDescription)
             }
             if granted {
-                print("Notification permission granted")
             } else {
-                print("Notification permission denied")
             }
         }
     }
@@ -438,7 +452,8 @@ struct PremiumAdPopup: View {
                     self.showBottomsheet = false
                     let customerInfoNotification = try await Purchases.shared.customerInfo()
                     if let entitlement = customerInfoNotification.entitlements.all["pro"], entitlement.isActive {
-                        if selectedOption == currentOffering?.package(identifier: "$rc_annual"){
+                        if selectedOption == currentOffering?.package(identifier: "$rc_annual") && (entitlement.periodType == .intro || entitlement.periodType == .trial)   {
+                            UserDefaults.standard.set(true, forKey: "ineligible")
                             UserViewModel().addSubscription()
                             
                         }
@@ -453,11 +468,11 @@ struct PremiumAdPopup: View {
         
     }
     
-    func checkEligibility() async {
+    func checkEligibility() {
         guard let offering = currentOffering else { return }
-        let productIdentifiers = offering.availablePackages.map { $0.storeProduct.productIdentifier }
+//        let productIdentifiers = offering.availablePackages.map { $0.storeProduct.productIdentifier }
         Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: ["LinSaver_0399_1y_1wO"]){ eligibility in
-            self.eligibility = eligibility
+            self.trialEligibility = eligibility
         }
     }
     func onDismissError(){
@@ -480,27 +495,27 @@ struct PackageView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text(package.storeProduct.localizedTitle)
+                    Text(package.storeProduct.productIdentifier ==  "LinSaver_0399_1y_1wO" ? "Yearly Subscription" : "Monthly Subscription")
                         .font(.headline)
                 }
                 Spacer()
                 VStack{
                     Text(package.storeProduct.localizedPriceString)
-                }
+                                        }
             }
             HStack{
-                Text(package.storeProduct.localizedDescription)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                VStack(alignment: .leading){
+                    Text(package.storeProduct.productIdentifier ==  "LinSaver_0399_1y_1wO" ? "First 1 week free,then \(package.storeProduct.localizedPriceString)/yr" : "Full Access for just \(package.storeProduct.localizedPriceString)/mo")
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                      
+                }
             }
             
             
         }
         .padding()
-        //.cornerRadius(10)
-        
-        
-        //.border(isSelected ? Color.blue : Color.secondary.opacity(0.5), width: 3)
+       
         .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2.5).foregroundColor(isSelected ? Color.blue : Color.secondary.opacity(0.5)))
         
     }

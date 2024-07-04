@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 
 struct AboutSubscriptionView: View {
+    @Environment(\.presentationMode) var presentationMode
     private var userViewModel = UserViewModel.shared
     @StateObject var viewModel = SettingsViewModel()
     private(set) var currentOffering: Offering? = UserViewModel.shared.offerings?.current
@@ -56,6 +57,7 @@ struct AboutSubscriptionView: View {
                         
                         trailing:
                             Button{
+                                presentationMode.wrappedValue.dismiss()
                                 viewModel.showAboutSubscription = false
                             } label: {
                                 Text("Done")
@@ -65,7 +67,7 @@ struct AboutSubscriptionView: View {
             
             
             
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 

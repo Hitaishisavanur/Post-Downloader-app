@@ -36,7 +36,8 @@ struct EditBookmarkSheetView: View {
                     }
                 }
             }
-        }.onAppear{
+        }.navigationViewStyle(.stack)
+        .onAppear{
             let dbBookmark = viewModel.fetchDBbookmarkbyId(by: bId)
            
             

@@ -19,13 +19,13 @@ struct InterstitialAdView: UIViewControllerRepresentable {
         }
         
         func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-            print("Ad was dismissed.")
+           
             viewController?.dismiss(animated: true, completion: nil)
             parent.adManager.onAdDismissed?()
         }
         
         func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-            print("Ad failed to present with error: \(error.localizedDescription)")
+           
             viewController?.dismiss(animated: true, completion: nil)
             parent.adManager.onAdDismissed?()
         }
@@ -48,7 +48,7 @@ struct InterstitialAdView: UIViewControllerRepresentable {
                 ad.present(fromRootViewController: viewController)
             }
         } else {
-            print("Ad wasn't ready")
+           
         }
         
         return viewController

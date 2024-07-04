@@ -16,7 +16,7 @@ struct LoadingOverlay<PresentingView: View>: View {
     var body: some View {
         ZStack {
             presentingView
-                .blur(radius: isPresented ? 3 : 0)
+                .blur(radius: isPresented ? 2 : 0)
                 .animation(.easeInOut, value: isPresented)
                 .allowsHitTesting(!isPresented) 
             
@@ -32,7 +32,7 @@ struct LoadingOverlay<PresentingView: View>: View {
                         .multilineTextAlignment(.center)
                 }
                 .padding(20)
-                .background(Color.black.opacity(0.8))
+                .background(Color.black.opacity(0.5))
                 .cornerRadius(10)
                 .frame(width: 200)
                 .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)

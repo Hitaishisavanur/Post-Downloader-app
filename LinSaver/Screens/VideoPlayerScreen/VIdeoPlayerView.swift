@@ -34,12 +34,16 @@ struct VideoPlayerView: View {
     var body: some View {
         NavigationView {
             VStack {
+                
                 if let url = URL(string: mediaItem.sourceFile) {
+                    
                     if url.pathExtension == "mp4" {
                         VideoPlayer(player: player)
                             .onAppear {
+                                
                                 let newPlayer = AVPlayer(url: url)
                                 player = newPlayer
+                                viewModel.isloading = false
                                 newPlayer.play()
                             }
                             .onDisappear {
@@ -52,9 +56,11 @@ struct VideoPlayerView: View {
                             VStack{
                                 if let image = viewModel.loadImage(from: mediaItem.displayImg) {
                                     ZoomableImageViewControllerRepresentable(image: image)
+                                    .edgesIgnoringSafeArea(.all)
                                     
-                                        .edgesIgnoringSafeArea(.all)
                                 }
+                            }.onAppear{
+                                viewModel.isloading = false
                             }
                             
                             Spacer()
@@ -204,7 +210,7 @@ struct VideoPlayerView: View {
                             if interstetialAdManager.interstitialAdLoaded  {
                                 self.isAdPresented = true
                             } else {
-                                print("Ad not ready")
+                              
                             }
                             
                         }
@@ -270,7 +276,7 @@ struct VideoPlayerView: View {
                     secondaryButton: .cancel()
                 )
             }
-        }
+        }.navigationViewStyle(.stack)
         
         .alert("Error", isPresented: $viewModel.showErrorAlert) {
             Button("OK") {
@@ -336,6 +342,14 @@ struct VideoPlayerView: View {
                 }
             )
         }
+        .onAppear{
+            viewModel.isloading = true
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+//                viewModel.isloading = false
+//                
+//                                   }
+        }
+        .loadingOverlay(isPresented: $viewModel.isloading, loadingText: "Loading...")
         
     }
 }

@@ -32,6 +32,7 @@ struct AddBookmarkSheetView: View {
                                 }) {
                                     Text("Paste")
                                 }
+                                .tint(.accent)
                                 .buttonStyle(.borderedProminent)
                             }
                         }
@@ -57,7 +58,8 @@ struct AddBookmarkSheetView: View {
                     }
                 }
             }
-        }.alert(isPresented: $showError){
+        }.navigationViewStyle(.stack)
+        .alert(isPresented: $showError){
             Alert(title: Text("ERROR"), message: Text("Please provide valid input"), dismissButton: .default(Text("OK")){
                 showError = false
             })

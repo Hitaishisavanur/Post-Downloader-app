@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import Photos
 import UIKit
 import CoreData
@@ -6,7 +7,7 @@ import CoreData
 class HomeScreenViewModel: ObservableObject {
     @Published var buyPremium: Bool = false
     @Published var downloadCount: Int
-  @Published var isShowingDownloader = false
+    @Published var isShowingDownloader = false
     @Published var dataModels: [DBmain] = []
     @Published var selectedMediaItem: MediaItem?
     @Published var exceeds: Bool = false
@@ -14,6 +15,8 @@ class HomeScreenViewModel: ObservableObject {
     @Published var isSubscribed: Bool = false
     private let userViewModel = UserViewModel.shared
     private let dataController = DataController.shared
+    @Published var isloading = false
+    let crashlyticsManager = CrashlyticsManager.shared
     
     init() {
         
@@ -44,7 +47,7 @@ class HomeScreenViewModel: ObservableObject {
         do {
             dataModels = try context.fetch(request)
         } catch {
-            print("Error fetching data models: \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
         }
     }
     
@@ -63,15 +66,16 @@ class HomeScreenViewModel: ObservableObject {
         
         
         guard let imagePath = path, let imageUrl = URL(string: imagePath) else {
+            crashlyticsManager.addLog(message: "failed to load image in HomeScreenviewModel")
             return nil
         }
         
         do {
-            print(imageUrl)
+           
             let imageData = try Data(contentsOf: imageUrl)
             return UIImage(data: imageData)
         } catch {
-            print("Error loading image: \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
             return nil
         }
     }

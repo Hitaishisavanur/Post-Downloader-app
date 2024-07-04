@@ -43,21 +43,12 @@ struct ChooseCollectionView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             )
-        }
+        }.navigationViewStyle(.stack)
         .onAppear {
             viewModel.fetchCollections()
-        }.onDisappear(){
-            
-           // showInterstetialAds()
         }
     }
-//    func showInterstetialAds() {
-//        if (interstetialAdsManager.interstitialAdLoaded){
-//            let result = interstetialAdsManager.displayInterstitialAd()
-//            print(result)
-//            //showingAddBookmarkSheet = true
-//        }
-//    }
+
     
     
 }

@@ -225,7 +225,8 @@ struct BookmarkView: View {
             )
             
             
-        }.onAppear{
+        }.navigationViewStyle(.stack)
+        .onAppear{
             if !viewModel.isSubscribed{
                 if(viewModel.bookmarks.count > 10){
                     exceeds = true

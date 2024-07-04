@@ -18,6 +18,8 @@ class CollectionsViewModel: ObservableObject {
     @Published var buyPro = false
     private let userViewModel = UserViewModel.shared
     @Published var exceeds = false
+    let crashlyticsManager = CrashlyticsManager.shared
+    
     
     init(){
         isSubscribed = userViewModel.subscriptionActive
@@ -43,15 +45,15 @@ class CollectionsViewModel: ObservableObject {
     
     func getLastThreeDisplayImages(for collection: MediaCollection) -> [UIImage]? {
         let mediaItems = collection.mediaItems
-        print(mediaItems)
+       
         var images: [UIImage] = []
         
         for id in mediaItems {
-            print(id)
+           
             if let dbMain = fetchDBmain(by: id){
-                print(dbMain)
+               
                 if let displayImgPath = dbMain.displayImg{
-                    print(displayImgPath)
+                  
                     if let image = loadImage(from: displayImgPath) {
                         
                         images.append(image)
@@ -59,7 +61,7 @@ class CollectionsViewModel: ObservableObject {
                 }
             }
         }
-        print(images)
+      
         return images
 
     }
@@ -80,6 +82,7 @@ class CollectionsViewModel: ObservableObject {
             
             
             guard let imagePath = path, let imageUrl = URL(string: imagePath) else {
+                crashlyticsManager.addLog(message: "failed to load image in collectionviewmodel")
                 return nil
             }
             
@@ -89,7 +92,7 @@ class CollectionsViewModel: ObservableObject {
                 
                 return UIImage(data: imageData)
             } catch {
-                print("Error loading image: \(error.localizedDescription)")
+                crashlyticsManager.addLog(message: error.localizedDescription)
                 return nil
             }
         }
@@ -116,14 +119,13 @@ class CollectionsViewModel: ObservableObject {
                 do{
                     try dataController.save()
                 }catch{
-                    print(error.localizedDescription)
+                    crashlyticsManager.addLog(message: error.localizedDescription)
                 }
                 fetchCollections()
-                print("Deleted object with ID: \(id)")
             }
            
         } catch {
-            print("Error deleting object with ID \(id): \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
         }
         
         
@@ -135,7 +137,7 @@ class CollectionsViewModel: ObservableObject {
             do{
                 try dataController.save()
             }catch{
-                print(error.localizedDescription)
+                crashlyticsManager.addLog(message: error.localizedDescription)
             }
                     fetchCollections()
         }
@@ -150,7 +152,7 @@ class CollectionsViewModel: ObservableObject {
         do {
             dataModels = try context.fetch(request)
         } catch {
-            print("Error fetching data models: \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
         }
     }
     
@@ -169,15 +171,15 @@ class CollectionsViewModel: ObservableObject {
         
         
         guard let imagePath = path, let imageUrl = URL(string: imagePath) else {
+            crashlyticsManager.addLog(message: "failed to load image by path in collectionviewmodel")
             return nil
         }
         
         do {
-            print(imageUrl)
             let imageData = try Data(contentsOf: imageUrl)
             return UIImage(data: imageData)
         } catch {
-            print("Error loading image: \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
             return nil
         }
     }

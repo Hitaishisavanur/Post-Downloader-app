@@ -68,8 +68,7 @@ struct CollectionsView: View {
                                     }
                                     
                                 }.cornerRadius(15)
-//                                    .padding(.top,10)
-//                                    .padding(.horizontal,10)
+
                                 
                                 
                                 
@@ -169,7 +168,8 @@ struct CollectionsView: View {
                 }
                 
             }
-        }.premiumBadge(isPresented: $exceeds , remainingText: "Free Collections: \(viewModel.collections.count)/3")
+        }.navigationViewStyle(.stack)
+        .premiumBadge(isPresented: $exceeds , remainingText: "Free Collections: \(viewModel.collections.count)/3")
            .exceedAlert(isPresented: $viewModel.buyPro)
     }
 

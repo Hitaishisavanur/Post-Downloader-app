@@ -82,7 +82,7 @@ struct SelectImagesView: View {
                     
                 }
             })
-        }
+        }.navigationViewStyle(.stack)
         .onAppear {
             viewModel.fetchFiles()
             viewModel.observeChanges()

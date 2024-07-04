@@ -12,6 +12,7 @@ class BookmarkViewModel: ObservableObject {
     @Published var isSubscribed: Bool = false
     @Published var buyPro = false
     private let userViewModel = UserViewModel.shared
+    let crashlyticsManager = CrashlyticsManager.shared
     
     init() {
         fetchBookmarks()
@@ -28,7 +29,7 @@ class BookmarkViewModel: ObservableObject {
         do {
             bookmarks = try dataController.container.viewContext.fetch(request)
         } catch {
-            print("Failed to fetch bookmarks: \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
         }
     }
     
@@ -47,7 +48,7 @@ class BookmarkViewModel: ObservableObject {
             try dataController.save()
             fetchBookmarks() // Refresh the list
         } catch {
-            print("Failed to save context: \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
         }
     }
     
@@ -69,7 +70,7 @@ class BookmarkViewModel: ObservableObject {
            do {
                return try context.fetch(fetchRequest).first
            } catch {
-               print("Failed to fetch DBbookmark with id \(id): \(error.localizedDescription)")
+               crashlyticsManager.addLog(message: error.localizedDescription)
                return nil
            }
        }
@@ -83,11 +84,10 @@ class BookmarkViewModel: ObservableObject {
             for object in results {
                 context.delete(object)
                 saveContext()
-                print("Deleted object with ID: \(id)")
             }
            
         } catch {
-            print("Error deleting object with ID \(id): \(error.localizedDescription)")
+            crashlyticsManager.addLog(message: error.localizedDescription)
         }
         
         

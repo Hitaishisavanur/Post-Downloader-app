@@ -2,10 +2,12 @@ import Foundation
 import Photos
 import CoreData
 import SwiftUI
+import FirebaseCrashlytics
 
 class DataController {
     
     static let shared = DataController() // Singleton
+    
     @Published var isSubscribed: Bool = false
     let container: NSPersistentContainer
     let userDefaults: UserDefaults
@@ -36,9 +38,9 @@ class DataController {
         if context.hasChanges {
             do {
                 try context.save()
-                print("Data saved")
+                
             } catch {
-                print("Failed to save data: \(error.localizedDescription)")
+               
                 throw error
             }
         }
@@ -57,12 +59,12 @@ class DataController {
             }
             do {
                 try save()
-                print("Deleted object with ID: \(id)")
+                
             } catch {
-                print(error.localizedDescription)
+                Crashlytics.crashlytics().log(error.localizedDescription)
             }
         } catch {
-            print("Error deleting object with ID \(id): \(error.localizedDescription)")
+            Crashlytics.crashlytics().log(error.localizedDescription)
         }
     }
     
@@ -80,20 +82,20 @@ class DataController {
                 if displayImg == sourceFile {
                     saveImageToPhotos(url: URL(string: sourceFile)!) { error in
                         if let error = error {
-                            print("Error saving image to photo library: \(error)")
+                            
                             completion(error)
                         } else {
-                            print("Image saved to photo library successfully.")
+                           
                             completion(nil)
                         }
                     }
                 } else {
                     saveVideoToPhotos(url: URL(string: sourceFile)!) { error in
                         if let error = error {
-                            print("Error saving video to photo library: \(error.localizedDescription)")
+                           
                             completion(error)
                         } else {
-                            print("Video saved to photo library successfully.")
+                          
                             completion(nil)
                         }
                     }
@@ -103,7 +105,7 @@ class DataController {
             }
             incrementDownloadCount()
         } catch {
-            print(error.localizedDescription)
+            
             completion(error)
             deleteById(id: id)
             
@@ -130,10 +132,10 @@ func saveImageToPhotos(url: URL, completion: @escaping (Error?) -> Void) {
         PHAssetChangeRequest.creationRequestForAsset(from: image)
     }) { success, error in
         if let error = error {
-            print("Error saving image to photo library: \(error)")
+           
             completion(error)
         } else {
-            print("Image saved to photo library successfully.")
+            
             completion(nil)
         }
     }
@@ -144,10 +146,10 @@ func saveVideoToPhotos(url: URL, completion: @escaping (Error?) -> Void) {
         PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
     }) { success, error in
         if let error = error {
-            print("Error saving video to photo library: \(error.localizedDescription)")
+      
             completion(error)
         } else {
-            print("Video saved to photo library successfully.")
+           
             completion(nil)
         }
     }
@@ -161,8 +163,9 @@ func fetchDBmain(by id: UUID) -> DBmain? {
     do {
         return try context.fetch(fetchRequest).first
     } catch {
-        print("Failed to fetch DBmain with id \(id): \(error.localizedDescription)")
+        Crashlytics.crashlytics().log(error.localizedDescription)
         return nil
+       
     }
 }
 
@@ -179,7 +182,7 @@ func addCollection(name: String) {
     do {
         try save()
     } catch {
-        print(error.localizedDescription)
+        Crashlytics.crashlytics().log(error.localizedDescription)
     }
 }
 
@@ -195,11 +198,11 @@ func addMediaToCollection(mediaId: UUID, collectionId: UUID) {
                             collection.mediaItems.append(mediaId)
                             try save()
                         } else {
-                            print("Media ID \(mediaId) already exists in the collection.")
+                            Crashlytics.crashlytics().log("error adding to mediaCollection even after having mediaId/file saved in device")
                         }
         }
     } catch {
-        print("Error adding media to collection: \(error.localizedDescription)")
+        Crashlytics.crashlytics().log(error.localizedDescription)
     }
 }
 
@@ -215,7 +218,7 @@ func removeMediaFromCollection(mediaId: UUID, collectionId: UUID) {
             try save()
         }
     } catch {
-        print("Error removing media from collection: \(error.localizedDescription)")
+        Crashlytics.crashlytics().log(error.localizedDescription)
     }
 }
 
@@ -226,7 +229,7 @@ func fetchCollections() -> [MediaCollection] {
     do {
         return try context.fetch(fetchRequest)
     } catch {
-        print("Error fetching collections: \(error.localizedDescription)")
+       
         return []
     }
 }
@@ -242,7 +245,7 @@ func removeMediaFromAllCollections(mediaId: UUID) {
         }
         try save()
     } catch {
-        print("Error removing media from all collections: \(error.localizedDescription)")
+        Crashlytics.crashlytics().log(error.localizedDescription)
     }
 }
     
@@ -260,7 +263,7 @@ func removeMediaFromAllCollections(mediaId: UUID) {
             scheduleTrialEndingNotification(for: localSubscription)
         } catch {
             // Handle the error appropriately
-            print("Error saving context: \(error)")
+            Crashlytics.crashlytics().log(error.localizedDescription)
         }
         
         
@@ -281,9 +284,9 @@ func removeMediaFromAllCollections(mediaId: UUID) {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Error scheduling notification: \(error)")
+                Crashlytics.crashlytics().log(error.localizedDescription)
             } else {
-                print("Notification scheduled successfully.")
+               
             }
         }
     }

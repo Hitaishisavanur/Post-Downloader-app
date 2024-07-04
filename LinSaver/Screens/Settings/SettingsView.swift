@@ -10,16 +10,51 @@ struct SettingsView: View{
         NavigationView {
             Form {
                 Section {
-                    Text("Try Ad-free Subscription")
+                    HStack{
+                        VStack{
+                            Text("Try Ad-free Subscription")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.tryAdFreeSubscription)
                     
-                    Text("Restore Purchase")
+                   
+                    HStack{
+                        VStack{
+                            Text("Restore Purchase")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.restorePurchase)
                     
-                    Text("About Subscription")
+                    
+                    HStack{
+                        VStack{
+                            Text("About Subscription")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.aboutSubscription)
                     
-                    Text("Manage Subscription")
+                
+                    HStack{
+                        VStack{
+                            Text("Manage Subscription")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.manageSubscription)
                     
 
@@ -27,34 +62,106 @@ struct SettingsView: View{
                 }
                 
                 Section {
-                    Text("Share App")
+                   
+                    HStack{
+                        VStack{
+                            Text("Share App")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.shareApp)
                     
-                    Text("Rate on the App Store")
+                    
+                    HStack{
+                        VStack{
+                            Text("Rate on the App Store")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.rateApp)
                 }
                 
                 Section {
-                    Text("FAQ")
+                    
+                    HStack{
+                        VStack{
+                            Text("FAQ")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.showFAQ)
                     
-                    Text("Contact Us")
+                    
+                    HStack{
+                        VStack{
+                            Text("Contact Us")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.contactUs)
                     
-                    Text("Send Feedback")
+                   
+                    HStack{
+                        VStack{
+                            Text("Send Feedback")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.sendFeedback)
                 }
                 
                 Section {
-                    Text("Privacy Policy")
+                    
+                    HStack{
+                        VStack{
+                            Text("Privacy Policy")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.showPrivacyPolicy)
                     
-                    Text("Terms of Use")
+                    
+                    HStack{
+                        VStack{
+                            Text("Terms of Use")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.showTermsOfUse)
                 }
                 
                 Section {
-                    Text("About")
+                    
+                    HStack{
+                        VStack{
+                            Text("About")
+                        }
+                        Spacer()
+                        VStack{
+                            Image(systemName: "chevron.forward")
+                        }
+                    }
                         .onTapGesture(perform: viewModel.showAbout)
                 }
             }
@@ -69,7 +176,8 @@ struct SettingsView: View{
                AboutSubscriptionView()
             }
             
-        }.alert(isPresented: $viewModel.showAboutAlert) {
+        }.navigationViewStyle(.stack)
+        .alert(isPresented: $viewModel.showAboutAlert) {
             Alert(title: Text("About"), message: Text(viewModel.aboutMessage), dismissButton: .default(Text("OK")))
         }
         .sheet(isPresented: $viewModel.isShowingShareSheet) {

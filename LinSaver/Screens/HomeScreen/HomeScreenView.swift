@@ -8,20 +8,20 @@ struct HomeScreenView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) var colorScheme
-   
+    @State private var showPremiumAd: Bool = false
     @ObservedObject var viewModel: HomeScreenViewModel
     @State private var selectedItems: Set<UUID> = []
     @State private var isSelectionMode: Bool = false
     @State private var showAlertforMultiple: Bool = false
     @State private var showAlert: Bool = false
     private let userViewModel = UserViewModel.shared
-    
+  
     @StateObject private var rewardedAdManager = RewardedAdManager()
     @State private var showRewardedAd = false
     @State private var rewardAlert = false
     
     @State private var saveReward: Bool = false
-    
+    @State var showProgressView = false
     @State var showCustomAlert = false
     @State var noInternetAlert = false
     @State var watchAds = false
@@ -42,24 +42,29 @@ struct HomeScreenView: View {
     
     
     var body: some View {
-        
+       
         NavigationView {
-            ZStack {
+                        ZStack {
+                            
+
                 VStack {
+                    
                     VStack {
                         Button(action: {
-                            if(viewModel.downloadCount <= 15) || (userViewModel.subscriptionActive){
-                                viewModel.isShowingDownloader = true
+                            if(viewModel.downloadCount < 15) || (userViewModel.subscriptionActive){
+                               viewModel.isShowingDownloader = true
                             }else{
                                 viewModel.buyPro = true
                             }
                         }) {
                             Text("Save New Post")
+                            
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
                                 .padding(7)
                         }
                         .buttonStyle(.borderedProminent)
+                        .tint(.accent)
                         .padding()
                         .sheet(isPresented: $viewModel.isShowingDownloader) {
                             DownloadCardView(viewModel: DownloadViewModel())
@@ -67,6 +72,7 @@ struct HomeScreenView: View {
                                     if(!userViewModel.subscriptionActive)&&(interstetialAdsManager.interstitialAdLoaded){
                                         interstetialAdsManager.displayInterstitialAd()
                                     }
+                                  
                                 }
                         }
                     }
@@ -201,20 +207,9 @@ struct HomeScreenView: View {
                         }
                     }
                 }
-                .alert(isPresented: $noInternetAlert) {
-                    
-                    Alert(
-                        title: Text("Failed to load Ad"),
-                        message: Text("Unable to load ad, please check your internet connection and try again after sometimes"),
-                        dismissButton: .destructive(Text("Done")) {
-                            saveReward = false
-                            
-                            noInternetAlert = false
-                        }
-                    )
-                }
-                
-                .navigationTitle("Downloader")
+               
+                .loadingOverlay(isPresented: $viewModel.isloading, loadingText: "Loading...")
+                .navigationTitle(Text("LinSaver"))
                 .background(
                     NavigationLink(
                         destination: RewardedAdViewControllerRepresentable(adManager: rewardedAdManager)
@@ -380,7 +375,7 @@ struct HomeScreenView: View {
                     
                 }
                 
-            }
+            }.navigationViewStyle(.stack)
             
             .alert(isPresented: $rewardAlert) {
                 Alert(title: Text("Congratulations!"), message: Text("Saved to Photos Successfully"), dismissButton: .default(Text("OK")))
@@ -394,7 +389,7 @@ struct HomeScreenView: View {
                 }
             }.onChange(of: scenePhase) { newPhase in
                 if newPhase == .active {
-                    print("Hello world")
+                  
                     viewModel.observeChanges()
                     viewContext.refreshAllObjects()
                 }
@@ -441,12 +436,52 @@ struct HomeScreenView: View {
                     isSelectionMode = false
                 }
                 
-            }
+            } 
            
-        .premiumBadge(isPresented: $viewModel.exceeds, remainingText: "Free Downloads: \(viewModel.downloadCount)/15")
-        .exceedAlert(isPresented: $viewModel.buyPro)
+            .onFirstAppear {
+                
+                checkSubscriptionStatus()
+               
+            }
+            
+            .sheet(isPresented: $showPremiumAd){
+                PremiumAdPopup()
+                    .onDisappear{
+                       viewModel.isloading = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                            viewModel.isloading = false
+                            
+                                               }
+                    }
+                
+                
+            }
+            .alert("Failed to load Ad", isPresented: $noInternetAlert, actions: {
+                Button(
+                    action: {
+                    saveReward = false
+                        noInternetAlert = false
+                    }, label: {
+                        Text("Done")
+                    })}, message: {
+                        Text("Unable to load ad, please check your internet connection and try again after sometimes")
+                    })
+
+                    .premiumBadge(isPresented: $viewModel.exceeds, remainingText: "Free Downloads: \(viewModel.downloadCount)/15")
+                    .exceedAlert(isPresented: $viewModel.buyPro)
     }
     
+      func checkSubscriptionStatus() {
+                // Fetch the customer info to update the subscription status
+                userViewModel.refreshCustomerInfo()
+          viewModel.isloading = userViewModel.subscriptionActive
+                // Set the showPremiumAd state based on the subscription status
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showPremiumAd = !userViewModel.subscriptionActive
+                }
+          
+            }
+        
     func checkPhotosPermission(){
        viewModel.checkPhotoLibraryAuthorization { authorized in
             if authorized {

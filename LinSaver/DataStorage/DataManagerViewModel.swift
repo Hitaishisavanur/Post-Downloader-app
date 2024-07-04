@@ -5,12 +5,12 @@ import SwiftUI
 
 class DataManagerViewModel {
     let dataController = DataController.shared
-    
+    let crashlyticsManager = CrashlyticsManager.shared
     func getDownloadsDirectory() -> URL? {
 
         let fileManager = FileManager.default
            guard let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.com.LinSaver.group") else {
-               print("Error accessing shared container URL")
+               crashlyticsManager.addLog(message: "error getting container from group.com.LinSaver.group")
                return nil
            }
            
@@ -22,7 +22,7 @@ class DataManagerViewModel {
                do {
                    try fileManager.createDirectory(at: downloadDirectory, withIntermediateDirectories: true, attributes: nil)
                } catch {
-                   print("Error creating download directory: \(error.localizedDescription)")
+                   crashlyticsManager.addLog(message: error.localizedDescription)
                }
            }
            
@@ -51,13 +51,13 @@ class DataManagerViewModel {
                        }
                        
                        try FileManager.default.moveItem(at: location, to: destinationURL)
-                       print("File saved: \(destinationURL)")
+                       
                        completion(.success(destinationURL))
                    } else {
                        completion(.failure(NSError(domain: "Download Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to get downloads directory"])))
                    }
                } catch {
-                   print("Error saving file:", error)
+                   
                    completion(.failure(error))
                }
            }.resume()
@@ -69,9 +69,9 @@ class DataManagerViewModel {
         for url in urls {
             do {
                 try fileManager.removeItem(at: url)
-                print("Deleted file at path: \(url.path)")
+                
             } catch {
-                print("Error deleting file at path \(url.path): \(error.localizedDescription)")
+                crashlyticsManager.addLog(message: error.localizedDescription)
             }
         }
     }

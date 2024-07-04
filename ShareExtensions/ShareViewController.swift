@@ -8,8 +8,10 @@
 import UIKit
 import SwiftUI
 
-class ShareViewController: UIViewController {
+class ShareViewController: UIViewController , ObservableObject{
     @Published private var sharedURL: String?
+    @Published var noView = false
+ 
     
 
     override func viewDidLoad() {
@@ -22,6 +24,7 @@ class ShareViewController: UIViewController {
             attachment.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
                 if let url = url as? URL {
                     self.sharedURL = url.absoluteString
+                 
                     DispatchQueue.main.async {
                         self.setupHostingController()
                     }
@@ -36,10 +39,11 @@ class ShareViewController: UIViewController {
 //        let downloadViewModel = DownloadViewModel(url: sharedURL)
         let rootView = NavigationView {
             ShareView(sharedURL: sharedURL)
-                .navigationBarItems(leading: Button("Cancel") {
+                .navigationBarItems(trailing: Button("Done") {
                     self.closer()
                 })
-        }
+        }.navigationViewStyle(.stack)
+    
 
         let hostingController = UIHostingController(rootView: rootView)
         
@@ -57,18 +61,26 @@ class ShareViewController: UIViewController {
     func closer(){
         self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
+    func downloadDone(){
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 
 struct ShareView: View {
     @State var sharedURL: String?
-    
+
 
     var body: some View {
-        if sharedURL != nil {
-            DownloadCardView(viewModel: DownloadViewModel(),url: sharedURL)
-        } else {
-            Text("No URL provided")
+        VStack{
+            if sharedURL != nil {
+                
+                DownloadCardView(viewModel: DownloadViewModel(),url: sharedURL)
+            } else {
+                
+                Text("No URL provided")
+            }
         }
+
     }
 }

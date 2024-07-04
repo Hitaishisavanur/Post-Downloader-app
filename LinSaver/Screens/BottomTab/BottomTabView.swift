@@ -34,11 +34,11 @@ struct BottomTabView: View {
                         .onFirstAppear {
                             checkSubscriptionStatus()
                         }
-                        .sheet(isPresented: $showPremiumAd){
-                            PremiumAdPopup()
+                   //     .sheet(isPresented: $showPremiumAd){
+                    //        PremiumAdPopup()
                                 
                                 
-                        }
+                   //     }
                         
                 }
                 
@@ -54,8 +54,9 @@ struct BottomTabView: View {
                 
                 SettingsView()
                     .tabItem { Label("Settings", systemImage: "gearshape")
+                            
                     }
-            }
+            }.accentColor(.accentColorBottomTab)
         }
         
             

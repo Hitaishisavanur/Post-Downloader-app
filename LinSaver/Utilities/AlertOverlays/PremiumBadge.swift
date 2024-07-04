@@ -44,10 +44,10 @@ struct PremiumBadge<PresentingView: View>: View {
                         }
                         .padding(3)
                         .background(Color.black.opacity(0.95))
-                        //.cornerRadius(10)
+                       
                         .frame(maxWidth: .infinity)
-                        //.frame(height: geometry.size.height * 0.1) // Set the height to 10% of the presenting view height
-                        .padding(.bottom, 25) // Set the bottom padding to 10% of the presenting view height
+                       
+                        .padding(.bottom, 25) 
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
                 }

@@ -1,15 +1,10 @@
-//
-//  Notifications.swift
-//  LinSaver
-//
-//  Created by Hitaishi Savanur on 07/06/24.
-//
+
 
 import Foundation
 import UserNotifications
 
 class LocalNotifications: ObservableObject{
-    
+    let crashlyticsManager = CrashlyticsManager.shared
 
     func scheduleTrialEndingNotification(for subscription: LocalSubscription) {
         guard let endDate = subscription.endDate else { return }
@@ -27,9 +22,9 @@ class LocalNotifications: ObservableObject{
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Error scheduling notification: \(error)")
+                self.crashlyticsManager.addLog(message: error.localizedDescription)
             } else {
-                print("Notification scheduled successfully.")
+               
             }
         }
     }

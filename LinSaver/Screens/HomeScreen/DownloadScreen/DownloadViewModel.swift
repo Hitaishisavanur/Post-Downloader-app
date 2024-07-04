@@ -15,6 +15,7 @@ class DownloadViewModel: ObservableObject {
     private let dataController = DataController.shared
     var viewModel = DataManagerViewModel()
     @Published var urls: String? = nil
+    @Published var downloadDone = false
     
     
   
@@ -46,7 +47,7 @@ class DownloadViewModel: ObservableObject {
        }
 
     func downloadButtonTapped(saveToPhotos: Bool) {
-        
+        downloadDone = false
         downloadHTML(text: text, saveToPhotos: saveToPhotos)
     }
 
@@ -60,6 +61,7 @@ class DownloadViewModel: ObservableObject {
 
         var sourceURL: URL?
         var displayImageURL: URL?
+       
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             if(saveToPhotos){
@@ -119,14 +121,17 @@ class DownloadViewModel: ObservableObject {
                                 }
                             }
                         } else if let ul = try? section.select("ul.feed-images-content").first() {
+                           
                             try? ul.select("li").forEach { li in
                                 if let imageURL = try? li.select("img").first()?.attr("data-delayed-url") {
-                                    group.enter()
+                                  group.enter()
                                     if let url = URL(string: imageURL) {
                                         let fileName = self.viewModel.getFileName(fileType: "jpeg")
                                         self.viewModel.downloadFile(url: url, fileName: fileName) { result in
                                             switch result {
                                             case .success(let destinationURL):
+                                                
+                                               
                                                 displayImageURL = destinationURL
                                                 sourceURL = destinationURL
                                             case .failure(let error):
@@ -134,36 +139,36 @@ class DownloadViewModel: ObservableObject {
                                                 self.isDownloadingAndSaving = false
                                                 self.showError("Error downloading image: \(error.localizedDescription)")
                                             }
-                                            group.leave()
+                                           group.leave()
                                         }
                                     }
                                 }
                             }
+                            
                         }
                     }
 
                     group.notify(queue: .main) {
-                        if let displayImageURL = displayImageURL, let sourceURL = sourceURL {
-                            self.viewModel.writeDownloadsToFolder(displayURLs: displayImageURL, sourceURLs: sourceURL, saveToPhotos: saveToPhotos, link: text) { error in
-                                if let error = error {
-                                    self.isDownloading = false
-                                    self.isDownloadingAndSaving = false
-                                    self.showError("Error writing downloads to folder: \(error.localizedDescription)")
-                                }else{
-                                    self.isDownloading = false
-                                    self.isDownloadingAndSaving = false
-                                    if(self.urls == nil){
-                                        
-                                    }else{
-                                        
-                                    }
-                                }
-                            }
-                        } else {
-                            self.isDownloading = false
-                            self.isDownloadingAndSaving = false
-                            self.showError("Error downloading, please check url.\n OR \n Unsupported format.\n If its a bug, kindly contact us")
-                        }
+                        
+                       
+                          if let displayImageURL = displayImageURL, let sourceURL = sourceURL {
+                              self.viewModel.writeDownloadsToFolder(displayURLs: displayImageURL, sourceURLs: sourceURL, saveToPhotos: saveToPhotos, link: text) { error in
+                                  if let error = error {
+                                      self.isDownloading = false
+                                      self.isDownloadingAndSaving = false
+                                      self.showError("Error writing downloads to folder: \(error.localizedDescription)")
+                                  }else{
+                                      self.isDownloading = false
+                                      self.isDownloadingAndSaving = false
+                                      self.downloadDone = true
+                                  }
+                              }
+                          } else {
+                              self.isDownloading = false
+                              self.isDownloadingAndSaving = false
+                              self.showError("Error downloading, please check url.\n OR \n Unsupported format.\n If its a bug, kindly contact us")
+                          }
+                      
                     }
                 } catch let error {
                     self.isDownloading = false

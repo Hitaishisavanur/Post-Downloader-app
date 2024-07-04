@@ -8,8 +8,8 @@ class VideoPlayerViewModel: ObservableObject{
     private let dataController = DataController.shared
     @Published var errorSavetoPhotosMessage = ""
     @Published var showErrorAlert: Bool = false
-    
-    
+    @Published var isloading = false
+    let crashyliticsManager = CrashlyticsManager.shared
     
     func saveToPhotos(mediaItem: MediaItem){
         let sourceFile = mediaItem.sourceFile
@@ -19,7 +19,7 @@ class VideoPlayerViewModel: ObservableObject{
                     if let error = error {
                         if error.localizedDescription == "The operation couldn’t be completed. (PHPhotosErrorDomain error 3311.)"{
                             self.errorSavetoPhotosMessage = "Permission denied to access photo library. Please enable it in device settings.\n Go to Settings > LinSaver > Photos > select \"Add Photos Only\""
-                            print("give permission to handle save option")
+                            
                             self.showErrorAlert = true
                         }else{
                             self.errorSavetoPhotosMessage = "Error saving image to photo library: \(error.localizedDescription)"
@@ -29,7 +29,7 @@ class VideoPlayerViewModel: ObservableObject{
                         
                     } else {
                         // Image saved successfully
-                        print("Image saved to photo library successfully.")
+                        
                     }
                 }
             }
@@ -41,7 +41,7 @@ class VideoPlayerViewModel: ObservableObject{
                         // Handle error
                         if error.localizedDescription == "The operation couldn’t be completed. (PHPhotosErrorDomain error 3311.)"{
                             self.errorSavetoPhotosMessage = "Permission denied to access photo library. Please enable it in device settings.\n Go to Settings > LinSaver > Photos > select \"Add Photos Only\""
-                            print("give permission to handle save option")
+                           
                             self.showErrorAlert = true
                         }else{
                             self.errorSavetoPhotosMessage = "Error saving video to photo library: \(error.localizedDescription)"
@@ -50,7 +50,7 @@ class VideoPlayerViewModel: ObservableObject{
                         
                     } else {
                         // Image saved successfully
-                        print("Video saved to photo library successfully.")
+                      
                     }
                }
             }
@@ -70,15 +70,16 @@ class VideoPlayerViewModel: ObservableObject{
         
         
         guard let imagePath = path, let imageUrl = URL(string: imagePath) else {
+            crashyliticsManager.addLog(message: "failed to load image in videoPlayerView")
             return nil
         }
         
         do {
-            print(imageUrl)
+           
             let imageData = try Data(contentsOf: imageUrl)
             return UIImage(data: imageData)
         } catch {
-            print("Error loading image: \(error.localizedDescription)")
+            crashyliticsManager.addLog(message: error.localizedDescription)
             return nil
         }
     }

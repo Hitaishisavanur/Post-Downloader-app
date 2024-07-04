@@ -373,7 +373,7 @@ struct CollectionAlbumView: View {
                                 isAdPresented = true
                             }
                         } else {
-                            print("Ad not ready")
+                          
                         }
                     }
                 
@@ -416,9 +416,18 @@ struct CollectionAlbumView: View {
                     }
                 )
             }
-        }
+        }.navigationViewStyle(.stack)
         
-        
+            .alert("Failed to load Ad", isPresented: $noInternetAlert, actions: {
+                Button(
+                    action: {
+                    saveReward = false
+                        noInternetAlert = false
+                    }, label: {
+                        Text("Done")
+                    })}, message: {
+                        Text("Unable to load ad, please check your internet connection and try again after sometimes")
+                    })
     }
     func checkPhotosPermission(){
         viewModel.checkPhotoLibraryAuthorization { authorized in

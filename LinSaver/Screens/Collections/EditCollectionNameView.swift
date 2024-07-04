@@ -37,16 +37,8 @@ struct EditCollectionNameView: View {
                     }
                 }
             }
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 
-//struct EditBookmarkSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditBookmarkSheetView(viewModel: BookmarkViewModel(), bId: UUID())
-//    }
-//}
 
-//#Preview {
-//    EditCollectionNameView()
-//}

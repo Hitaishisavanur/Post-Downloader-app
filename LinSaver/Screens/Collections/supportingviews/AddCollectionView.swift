@@ -42,6 +42,7 @@ struct AddCollectionView: View {
                             .font(.title2)
                             .frame(maxWidth: .infinity)
                     }
+                    .tint(.accent)
                     .buttonStyle(.borderedProminent)
                     
                     
@@ -58,7 +59,7 @@ struct AddCollectionView: View {
                     }
                     
                 }
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 #Preview {

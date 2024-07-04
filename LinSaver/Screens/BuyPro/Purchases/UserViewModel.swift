@@ -3,7 +3,7 @@
 //  LinSaver
 //
 //  Created by Hitaishi Savanur on 07/06/24.
-//
+
 
 import Foundation
 import RevenueCat
@@ -24,7 +24,7 @@ class UserViewModel: ObservableObject {
     /* The latest CustomerInfo from RevenueCat. Updated by PurchasesDelegate whenever the Purchases SDK updates the cache */
     @Published var customerInfo: CustomerInfo? {
         didSet {
-            subscriptionActive = customerInfo?.entitlements["pro"]?.isActive == true
+           subscriptionActive = customerInfo?.entitlements["pro"]?.isActive == true
         }
     }
     
@@ -62,7 +62,6 @@ class UserViewModel: ObservableObject {
     func restorePurchases(){
         Purchases.shared.restorePurchases { customerInfo, error in
                     if let error = error {
-                        print("Error restoring purchases: \(error.localizedDescription)")
                        // self.settingsViewModel.showError(message: "Error restoring purchases: \(error.localizedDescription)")
                     } else {
                         if let activeSubscriptions = customerInfo?.activeSubscriptions, !activeSubscriptions.isEmpty{

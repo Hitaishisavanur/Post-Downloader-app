@@ -20,6 +20,7 @@
 		9553BF5D2BCDDF65009761B2 /* BookmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9553BF5C2BCDDF65009761B2 /* BookmarkView.swift */; };
 		9553BF5F2BCDDF82009761B2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9553BF5E2BCDDF82009761B2 /* SettingsView.swift */; };
 		955AD6472BF626C200058792 /* VideoPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 955AD6462BF626C200058792 /* VideoPlayerViewModel.swift */; };
+		9566960D2C29913200AB20C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95C3847E2BCC6BD000E81682 /* Assets.xcassets */; };
 		9575E6052BF37ADC0085A88F /* CollectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9575E6042BF37ADB0085A88F /* CollectionsViewModel.swift */; };
 		9575E6072BF37C360085A88F /* AddCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9575E6062BF37C360085A88F /* AddCollectionView.swift */; };
 		9575E60A2BF382890085A88F /* MediaCollection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9575E6082BF382880085A88F /* MediaCollection+CoreDataClass.swift */; };
@@ -34,18 +35,15 @@
 		95A571162C24569D00DD2744 /* ExceedsAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A571152C24569D00DD2744 /* ExceedsAlert.swift */; };
 		95A7840A2C21F6B6004BB5DD /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 95A784092C21F6B6004BB5DD /* RevenueCat */; };
 		95A7840C2C21F6C7004BB5DD /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 95A7840B2C21F6C7004BB5DD /* RevenueCatUI */; };
-		95A7E5072BCF3223007FA4AC /* BuyProView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A7E5062BCF3223007FA4AC /* BuyProView.swift */; };
-		95AFA47C2BEB67EC00C47456 /* BuyPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA47B2BEB67EC00C47456 /* BuyPro.swift */; };
-		95AFA47E2BEB680100C47456 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA47D2BEB680100C47456 /* Download.swift */; };
 		95AFA4802BEB687100C47456 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA47F2BEB687100C47456 /* HomeScreen.swift */; };
-		95AFA4822BEB688400C47456 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA4812BEB688400C47456 /* Settings.swift */; };
 		95AFA4842BEB6A1400C47456 /* CollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA4832BEB6A1400C47456 /* CollectionsView.swift */; };
 		95AFA4862BEB6ADA00C47456 /* HomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA4852BEB6ADA00C47456 /* HomeScreenViewModel.swift */; };
 		95AFA4882BEB6B3400C47456 /* DownloadCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA4872BEB6B3400C47456 /* DownloadCardView.swift */; };
 		95AFA48A2BEB6B8900C47456 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA4892BEB6B8900C47456 /* DownloadViewModel.swift */; };
 		95AFA48C2BEB6C6200C47456 /* PremiumAdPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA48B2BEB6C6200C47456 /* PremiumAdPopupView.swift */; };
-		95AFA48E2BEB6CDB00C47456 /* BuyProViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA48D2BEB6CDB00C47456 /* BuyProViewModel.swift */; };
 		95AFA4902BEB6D3600C47456 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA48F2BEB6D3600C47456 /* SettingsViewModel.swift */; };
+		95B3251C2C2D16E0003BA5CD /* CrashlyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B3251B2C2D16E0003BA5CD /* CrashlyticsManager.swift */; };
+		95B3251D2C2D16E0003BA5CD /* CrashlyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B3251B2C2D16E0003BA5CD /* CrashlyticsManager.swift */; };
 		95B382DB2C1A50900033D85B /* SelectImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B382DA2C1A50900033D85B /* SelectImagesView.swift */; };
 		95B382DD2C1A51310033D85B /* EditCollectionNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B382DC2C1A51310033D85B /* EditCollectionNameView.swift */; };
 		95B382E02C1A521F0033D85B /* PurchasesDelegateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B382DF2C1A521F0033D85B /* PurchasesDelegateHandler.swift */; };
@@ -69,17 +67,23 @@
 		95B3831B2C1A5CF50033D85B /* DBmainModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 95A4C3282BEF02A100C398E6 /* DBmainModel.xcdatamodeld */; };
 		95B3831C2C1A5CF90033D85B /* DataManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952478952BEB8E3800A1E2B2 /* DataManagerViewModel.swift */; };
 		95B383202C1A5D6C0033D85B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B3831F2C1A5D6C0033D85B /* StoreKit.framework */; };
-		95B383222C1A5E020033D85B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA4812BEB688400C47456 /* Settings.swift */; };
 		95B383232C1A5E0B0033D85B /* MediaCollection+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9575E6092BF382880085A88F /* MediaCollection+CoreDataProperties.swift */; };
 		95B383242C1A5E0E0033D85B /* MediaCollection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9575E6082BF382880085A88F /* MediaCollection+CoreDataClass.swift */; };
 		95B383262C1A5E5C0033D85B /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 95B383252C1A5E5C0033D85B /* SwiftSoup */; };
 		95B383282C1A83F30033D85B /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B383272C1A83F30033D85B /* CustomAlert.swift */; };
 		95B3BDA32C2293240022D9EE /* AboutSubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B3BDA22C2293240022D9EE /* AboutSubscriptionView.swift */; };
+		95B432762C257C9D0019EE8A /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A571132C2453B300DD2744 /* ShareViewController.swift */; };
 		95B4587B2C233FEE0010547F /* LoadingOverlayview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B4587A2C233FEE0010547F /* LoadingOverlayview.swift */; };
 		95B4587D2C2347410010547F /* LoadingOverlayview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B4587A2C233FEE0010547F /* LoadingOverlayview.swift */; };
 		95B458802C2354650010547F /* RestorePurchaseAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B4587F2C2354650010547F /* RestorePurchaseAlertView.swift */; };
 		95B458822C23602F0010547F /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AFA47F2BEB687100C47456 /* HomeScreen.swift */; };
 		95BCE94A2C1BF63E003BDB02 /* nFirstAppearModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BCE9492C1BF63E003BDB02 /* nFirstAppearModifier.swift */; };
+		95C1C2112C2C4AFC00AA2638 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 95C1C2102C2C4AFC00AA2638 /* GoogleService-Info.plist */; };
+		95C1C2122C2C4AFC00AA2638 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 95C1C2102C2C4AFC00AA2638 /* GoogleService-Info.plist */; };
+		95C1C2152C2C4C9400AA2638 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 95C1C2142C2C4C9400AA2638 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		95C1C2172C2C4CD000AA2638 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 95C1C2162C2C4CD000AA2638 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		95C1C2192C2C4DE900AA2638 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 95C1C2182C2C4DE900AA2638 /* FirebaseCrashlytics */; };
+		95C1C21B2C2C4DF600AA2638 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 95C1C21A2C2C4DF600AA2638 /* FirebaseCrashlytics */; };
 		95C3847B2BCC6BCA00E81682 /* LinSaverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C3847A2BCC6BCA00E81682 /* LinSaverApp.swift */; };
 		95C3847F2BCC6BD000E81682 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95C3847E2BCC6BD000E81682 /* Assets.xcassets */; };
 		95C384822BCC6BD000E81682 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95C384812BCC6BD000E81682 /* Preview Assets.xcassets */; };
@@ -134,18 +138,14 @@
 		95A5710D2C24393100DD2744 /* PremiumBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumBadge.swift; sourceTree = "<group>"; };
 		95A571132C2453B300DD2744 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		95A571152C24569D00DD2744 /* ExceedsAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExceedsAlert.swift; sourceTree = "<group>"; };
-		95A7E5062BCF3223007FA4AC /* BuyProView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyProView.swift; sourceTree = "<group>"; };
-		95AFA47B2BEB67EC00C47456 /* BuyPro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyPro.swift; sourceTree = "<group>"; };
-		95AFA47D2BEB680100C47456 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		95AFA47F2BEB687100C47456 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
-		95AFA4812BEB688400C47456 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		95AFA4832BEB6A1400C47456 /* CollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsView.swift; sourceTree = "<group>"; };
 		95AFA4852BEB6ADA00C47456 /* HomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewModel.swift; sourceTree = "<group>"; };
 		95AFA4872BEB6B3400C47456 /* DownloadCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCardView.swift; sourceTree = "<group>"; };
 		95AFA4892BEB6B8900C47456 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		95AFA48B2BEB6C6200C47456 /* PremiumAdPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumAdPopupView.swift; sourceTree = "<group>"; };
-		95AFA48D2BEB6CDB00C47456 /* BuyProViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyProViewModel.swift; sourceTree = "<group>"; };
 		95AFA48F2BEB6D3600C47456 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		95B3251B2C2D16E0003BA5CD /* CrashlyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashlyticsManager.swift; sourceTree = "<group>"; };
 		95B382DA2C1A50900033D85B /* SelectImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImagesView.swift; sourceTree = "<group>"; };
 		95B382DC2C1A51310033D85B /* EditCollectionNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCollectionNameView.swift; sourceTree = "<group>"; };
 		95B382DF2C1A521F0033D85B /* PurchasesDelegateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesDelegateHandler.swift; sourceTree = "<group>"; };
@@ -170,6 +170,7 @@
 		95B4587A2C233FEE0010547F /* LoadingOverlayview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayview.swift; sourceTree = "<group>"; };
 		95B4587F2C2354650010547F /* RestorePurchaseAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePurchaseAlertView.swift; sourceTree = "<group>"; };
 		95BCE9492C1BF63E003BDB02 /* nFirstAppearModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nFirstAppearModifier.swift; sourceTree = "<group>"; };
+		95C1C2102C2C4AFC00AA2638 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		95C384772BCC6BCA00E81682 /* LinSaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinSaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95C3847A2BCC6BCA00E81682 /* LinSaverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinSaverApp.swift; sourceTree = "<group>"; };
 		95C3847E2BCC6BD000E81682 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -183,7 +184,9 @@
 			files = (
 				95A7840A2C21F6B6004BB5DD /* RevenueCat in Frameworks */,
 				95B383262C1A5E5C0033D85B /* SwiftSoup in Frameworks */,
+				95C1C2192C2C4DE900AA2638 /* FirebaseCrashlytics in Frameworks */,
 				95A7840C2C21F6C7004BB5DD /* RevenueCatUI in Frameworks */,
+				95C1C2172C2C4CD000AA2638 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,7 +195,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				95B383182C1A5C5A0033D85B /* RevenueCatUI in Frameworks */,
+				95C1C2152C2C4C9400AA2638 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				95B383132C1A5B5D0033D85B /* GoogleMobileAds in Frameworks */,
+				95C1C21B2C2C4DF600AA2638 /* FirebaseCrashlytics in Frameworks */,
 				95B383202C1A5D6C0033D85B /* StoreKit.framework in Frameworks */,
 				952478932BEB845000A1E2B2 /* SwiftSoup in Frameworks */,
 				95B383162C1A5C5A0033D85B /* RevenueCat in Frameworks */,
@@ -294,9 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				95B382DE2C1A52010033D85B /* Purchases */,
-				95A7E5062BCF3223007FA4AC /* BuyProView.swift */,
 				95AFA48B2BEB6C6200C47456 /* PremiumAdPopupView.swift */,
-				95AFA48D2BEB6CDB00C47456 /* BuyProViewModel.swift */,
 			);
 			path = BuyPro;
 			sourceTree = "<group>";
@@ -345,12 +348,17 @@
 		95AFA4792BEB67A300C47456 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				95AFA47B2BEB67EC00C47456 /* BuyPro.swift */,
-				95AFA47D2BEB680100C47456 /* Download.swift */,
 				95AFA47F2BEB687100C47456 /* HomeScreen.swift */,
-				95AFA4812BEB688400C47456 /* Settings.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		95B3251A2C2D16BC003BA5CD /* Crashalytics */ = {
+			isa = PBXGroup;
+			children = (
+				95B3251B2C2D16E0003BA5CD /* CrashlyticsManager.swift */,
+			);
+			path = Crashalytics;
 			sourceTree = "<group>";
 		};
 		95B382DE2C1A52010033D85B /* Purchases */ = {
@@ -365,9 +373,9 @@
 		95B382E32C1A52C80033D85B /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				95BCE9492C1BF63E003BDB02 /* nFirstAppearModifier.swift */,
 				95B382E42C1A52E30033D85B /* AdsManager */,
 				95B382E52C1A53130033D85B /* ImageViewer */,
-				95BCE9492C1BF63E003BDB02 /* nFirstAppearModifier.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -412,12 +420,9 @@
 		95B382F42C1A54E20033D85B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				95B432752C2578C50019EE8A /* AlertOverlays */,
 				95B382F52C1A54EC0033D85B /* Notifications */,
 				95B382F62C1A54F70033D85B /* Themes */,
-				95B4587A2C233FEE0010547F /* LoadingOverlayview.swift */,
-				95B4587F2C2354650010547F /* RestorePurchaseAlertView.swift */,
-				95A5710D2C24393100DD2744 /* PremiumBadge.swift */,
-				95A571152C24569D00DD2744 /* ExceedsAlert.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -458,6 +463,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		95B432752C2578C50019EE8A /* AlertOverlays */ = {
+			isa = PBXGroup;
+			children = (
+				95B4587A2C233FEE0010547F /* LoadingOverlayview.swift */,
+				95B4587F2C2354650010547F /* RestorePurchaseAlertView.swift */,
+				95A5710D2C24393100DD2744 /* PremiumBadge.swift */,
+				95A571152C24569D00DD2744 /* ExceedsAlert.swift */,
+			);
+			path = AlertOverlays;
+			sourceTree = "<group>";
+		};
 		95C3846E2BCC6BCA00E81682 = {
 			isa = PBXGroup;
 			children = (
@@ -482,6 +498,8 @@
 		95C384792BCC6BCA00E81682 /* LinSaver */ = {
 			isa = PBXGroup;
 			children = (
+				95B3251A2C2D16BC003BA5CD /* Crashalytics */,
+				95C1C2102C2C4AFC00AA2638 /* GoogleService-Info.plist */,
 				95B383212C1A5D950033D85B /* LinSaver.entitlements */,
 				95B382F42C1A54E20033D85B /* Utilities */,
 				95B382E32C1A52C80033D85B /* UIKit */,
@@ -514,6 +532,7 @@
 				95B382FD2C1A57620033D85B /* Sources */,
 				95B382FE2C1A57620033D85B /* Frameworks */,
 				95B382FF2C1A57620033D85B /* Resources */,
+				95C1C21D2C2C4F0900AA2638 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -524,6 +543,8 @@
 				95B383252C1A5E5C0033D85B /* SwiftSoup */,
 				95A784092C21F6B6004BB5DD /* RevenueCat */,
 				95A7840B2C21F6C7004BB5DD /* RevenueCatUI */,
+				95C1C2162C2C4CD000AA2638 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				95C1C2182C2C4DE900AA2638 /* FirebaseCrashlytics */,
 			);
 			productName = ShareExtensions;
 			productReference = 95B383012C1A57620033D85B /* ShareExtensions.appex */;
@@ -537,6 +558,7 @@
 				95C384742BCC6BCA00E81682 /* Frameworks */,
 				95C384752BCC6BCA00E81682 /* Resources */,
 				95B3830F2C1A57620033D85B /* Embed Foundation Extensions */,
+				95C1C21C2C2C4ECB00AA2638 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -549,6 +571,8 @@
 				95B383122C1A5B5D0033D85B /* GoogleMobileAds */,
 				95B383152C1A5C5A0033D85B /* RevenueCat */,
 				95B383172C1A5C5A0033D85B /* RevenueCatUI */,
+				95C1C2142C2C4C9400AA2638 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				95C1C21A2C2C4DF600AA2638 /* FirebaseCrashlytics */,
 			);
 			productName = newTrial;
 			productReference = 95C384772BCC6BCA00E81682 /* LinSaver.app */;
@@ -585,6 +609,7 @@
 				952478912BEB845000A1E2B2 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				95B383102C1A5A9D0033D85B /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				95B383142C1A5C5A0033D85B /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				95C1C2132C2C4C9400AA2638 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 95C384782BCC6BCA00E81682 /* Products */;
 			projectDirPath = "";
@@ -601,7 +626,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9566960D2C29913200AB20C2 /* Assets.xcassets in Resources */,
 				95B383072C1A57620033D85B /* Base in Resources */,
+				95C1C2122C2C4AFC00AA2638 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,10 +638,58 @@
 			files = (
 				95C384822BCC6BD000E81682 /* Preview Assets.xcassets in Resources */,
 				95C3847F2BCC6BD000E81682 /* Assets.xcassets in Resources */,
+				95C1C2112C2C4AFC00AA2638 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		95C1C21C2C2C4ECB00AA2638 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+		95C1C21D2C2C4F0900AA2638 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		95B382FD2C1A57620033D85B /* Sources */ = {
@@ -624,13 +699,13 @@
 				95B383242C1A5E0E0033D85B /* MediaCollection+CoreDataClass.swift in Sources */,
 				95A571142C2453B300DD2744 /* ShareViewController.swift in Sources */,
 				95B3831C2C1A5CF90033D85B /* DataManagerViewModel.swift in Sources */,
-				95B383222C1A5E020033D85B /* Settings.swift in Sources */,
 				95B4587D2C2347410010547F /* LoadingOverlayview.swift in Sources */,
 				95B3831B2C1A5CF50033D85B /* DBmainModel.xcdatamodeld in Sources */,
 				95B383232C1A5E0B0033D85B /* MediaCollection+CoreDataProperties.swift in Sources */,
 				95B458822C23602F0010547F /* HomeScreen.swift in Sources */,
 				95B383192C1A5CCD0033D85B /* DownloadCardView.swift in Sources */,
 				95A571122C244F3C00DD2744 /* DataController.swift in Sources */,
+				95B3251D2C2D16E0003BA5CD /* CrashlyticsManager.swift in Sources */,
 				95B3831A2C1A5CD40033D85B /* DownloadViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,7 +721,7 @@
 				95B382FC2C1A556E0033D85B /* Theme.swift in Sources */,
 				9553BF5D2BCDDF65009761B2 /* BookmarkView.swift in Sources */,
 				95AFA48C2BEB6C6200C47456 /* PremiumAdPopupView.swift in Sources */,
-				95AFA48E2BEB6CDB00C47456 /* BuyProViewModel.swift in Sources */,
+				95B432762C257C9D0019EE8A /* ShareViewController.swift in Sources */,
 				95B382E02C1A521F0033D85B /* PurchasesDelegateHandler.swift in Sources */,
 				9585E0562BF25096004211BD /* VIdeoPlayerView.swift in Sources */,
 				95A4C32A2BEF02A100C398E6 /* DBmainModel.xcdatamodeld in Sources */,
@@ -671,10 +746,10 @@
 				9575E60B2BF382890085A88F /* MediaCollection+CoreDataProperties.swift in Sources */,
 				9532B8382BF748E3003C24A2 /* AddBookmarkSheetView.swift in Sources */,
 				952AE4172BF8D23B004D90F0 /* EditBookmarkSheetView.swift in Sources */,
-				95AFA4822BEB688400C47456 /* Settings.swift in Sources */,
 				95B382ED2C1A53D10033D85B /* RewardedAdManager.swift in Sources */,
 				9553BF572BCDDE6E009761B2 /* BottomTabView.swift in Sources */,
 				95B382EF2C1A53F40033D85B /* RewardedAdViewControllerRepresentable.swift in Sources */,
+				95B3251C2C2D16E0003BA5CD /* CrashlyticsManager.swift in Sources */,
 				95AFA4882BEB6B3400C47456 /* DownloadCardView.swift in Sources */,
 				95511EA22BF7FAA800D9BAF8 /* ShareSheetView.swift in Sources */,
 				954F2F1F2BF680E7003497A7 /* ChooseCollectionViewModel.swift in Sources */,
@@ -685,11 +760,8 @@
 				95AFA4862BEB6ADA00C47456 /* HomeScreenViewModel.swift in Sources */,
 				952478962BEB8E3800A1E2B2 /* DataManagerViewModel.swift in Sources */,
 				95A5710E2C24393100DD2744 /* PremiumBadge.swift in Sources */,
-				95A7E5072BCF3223007FA4AC /* BuyProView.swift in Sources */,
-				95AFA47C2BEB67EC00C47456 /* BuyPro.swift in Sources */,
 				95B382FA2C1A55550033D85B /* BackgroundGradientModifier.swift in Sources */,
 				954F2F1C2BF67E5B003497A7 /* ChoosecollectionView.swift in Sources */,
-				95AFA47E2BEB680100C47456 /* Download.swift in Sources */,
 				95B382DB2C1A50900033D85B /* SelectImagesView.swift in Sources */,
 				95AFA4902BEB6D3600C47456 /* SettingsViewModel.swift in Sources */,
 			);
@@ -723,6 +795,7 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtensions/ShareExtensions.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WST6WDXAHZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ShareExtensions/Info.plist;
@@ -735,6 +808,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitugo.LinSaver.ShareExtensions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -762,6 +836,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitugo.LinSaver.ShareExtensions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -898,7 +973,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LinSaver/LinSaver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"LinSaver/Preview Content\"";
 				DEVELOPMENT_TEAM = WST6WDXAHZ;
 				ENABLE_PREVIEWS = YES;
@@ -907,7 +983,6 @@
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need to add photos and videos to your photo library so you can access them later.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -915,7 +990,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitugo.LinSaver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -932,7 +1008,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LinSaver/LinSaver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"LinSaver/Preview Content\"";
 				DEVELOPMENT_TEAM = WST6WDXAHZ;
 				ENABLE_PREVIEWS = YES;
@@ -941,7 +1017,6 @@
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need to add photos and videos to your photo library so you can access them later.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -949,7 +1024,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitugo.LinSaver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1015,6 +1091,14 @@
 				minimumVersion = 4.43.0;
 			};
 		};
+		95C1C2132C2C4C9400AA2638 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.28.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1052,6 +1136,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 952478912BEB845000A1E2B2 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		95C1C2142C2C4C9400AA2638 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95C1C2132C2C4C9400AA2638 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		95C1C2162C2C4CD000AA2638 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95C1C2132C2C4C9400AA2638 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		95C1C2182C2C4DE900AA2638 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95C1C2132C2C4C9400AA2638 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		95C1C21A2C2C4DF600AA2638 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95C1C2132C2C4C9400AA2638 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 
